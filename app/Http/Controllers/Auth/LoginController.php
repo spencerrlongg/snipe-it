@@ -299,6 +299,9 @@ class LoginController extends Controller
 
         // If the user wasn't authenticated via LDAP, skip to local auth
         if (! $user) {
+           if($request->expectsJson()) {
+                return response()->json(['error' => 'Unauthorized'], 401);
+           } else {
             Log::debug('Authenticating user against database.');
             // Try to log the user in
             if (! Auth::attempt(['username' => $request->input('username'), 'password' => $request->input('password'), 'activated' => 1], $request->input('remember'))) {
@@ -313,6 +316,7 @@ class LoginController extends Controller
                 $this->clearLoginAttempts($request);
             }
         }
+        }
 
         if ($user = Auth::user()) {
             $user->last_login = \Carbon::now();
@@ -320,7 +324,12 @@ class LoginController extends Controller
             $user->save();
         }
         // Redirect to the users page
-        return redirect()->intended()->with('success', trans('auth/message.signin.success'));
+        if ($request->expectsJson()) {
+            $token = $user->createToken('snipe-it-mobile')->accessToken;
+            return response()->json(['token' => $token]);
+        } else {
+            return redirect()->intended()->with('success', trans('auth/message.signin.success')); 
+        }
     }
 
 
