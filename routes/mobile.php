@@ -14,7 +14,7 @@ Route::post('/mobile/login', function(Request $request) {
     if (Auth::attempt($credentials)) {
         // Authentication passed...
          $user = Auth::user();
-         $token = $user->createToken('Token Name');
+         $token = $user->createToken($request->device_name);
 
         return response()->json([
             'token' => $token->accessToken,
