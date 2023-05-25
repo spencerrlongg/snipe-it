@@ -23,6 +23,9 @@ class RouteServiceProvider extends ServiceProvider
             $this->mapApiRoutes();
 
             $this->mapWebRoutes();
+           
+           //mobile experimenting 
+            require base_path('routes/mobile.php'); 
 
             require base_path('routes/scim.php');
         });
@@ -51,7 +54,7 @@ class RouteServiceProvider extends ServiceProvider
             require base_path('routes/web/users.php');
             require base_path('routes/web/kits.php');
             require base_path('routes/web.php');
-            require base_path('routes/mobile.php');  
+             
         });
     }
 
