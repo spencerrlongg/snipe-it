@@ -40,6 +40,7 @@ use App\Policies\SupplierPolicy;
 use App\Policies\UserPolicy;
 use Carbon\Carbon;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
 use Laravel\Passport\Passport;
 
@@ -87,6 +88,11 @@ class AuthServiceProvider extends ServiceProvider
         ]);
 
         $this->registerPolicies();
+       
+        Auth::extend('mobile', function() {
+           // blah 
+        });
+
         Passport::routes();
         Passport::tokensExpireIn(Carbon::now()->addYears(config('passport.expiration_years')));
         Passport::refreshTokensExpireIn(Carbon::now()->addYears(config('passport.expiration_years')));

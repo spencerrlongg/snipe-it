@@ -55,7 +55,7 @@ class LoginController extends Controller
     {
         parent::__construct();
         $this->middleware('guest', ['except' => ['logout', 'postTwoFactorAuth', 'getTwoFactorAuth', 'getTwoFactorEnroll']]);
-        Session::put('backUrl', \URL::previous());
+        // Session::put('backUrl', \URL::previous());
         // $this->ldap = $ldap;
         $this->saml = $saml;
     }
@@ -254,6 +254,7 @@ class LoginController extends Controller
     public function login(Request $request)
     {
 
+        ray('login'); 
         //If the environment is set to ALWAYS require SAML, return access denied
         if (config('app.require_saml')) {
             \Log::debug('require SAML is enabled in the .env - return a 403');
@@ -268,6 +269,9 @@ class LoginController extends Controller
         $validator = $this->validator($request->all());
 
         if ($validator->fails()) {
+            if ($request->expectsJson()) {
+                return response()->json(['errors'=>$validator->errors()]);
+            }
             return redirect()->back()->withInput()->withErrors($validator);
         }
 
@@ -294,6 +298,15 @@ class LoginController extends Controller
             // local authentication.
             } catch (\Exception $e) {
                 Log::debug('There was an error authenticating the LDAP user: '.$e->getMessage());
+            }
+        }
+       
+        if($request->expectsJson()) {
+            if (! $user) {
+                return response()->json(['error' => 'Unauthorized'], 401);
+            } else {
+                $token = $user->createToken('snipe-it-mobile')->accessToken;
+                return response()->json(['token' => $token]);
             }
         }
 

@@ -22,7 +22,7 @@ Route::post('/mobile/login', function(Request $request) {
             'user' => $user->only('id', 'first_name', 'last_name', 'email')
         ]);
     } else {
-        return response()->json(['error' => 'Unauthorised'], 401);
+        return response()->json(['error' => 'Authentication Failed'], 401);
     } 
 })->name('mobile.login');
 

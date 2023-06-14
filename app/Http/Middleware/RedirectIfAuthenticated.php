@@ -17,6 +17,10 @@ class RedirectIfAuthenticated
      */
     public function handle($request, Closure $next, $guard = null)
     {
+        return 'poo';
+    //    if ($request->acceptsJson()) {
+    //         return response()->json(['success' => 'success'], 200);
+    //    } 
         if (Auth::guard($guard)->check()) {
             return redirect()->intended('/');
         }

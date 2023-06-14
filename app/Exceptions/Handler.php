@@ -138,6 +138,8 @@ class Handler extends ExceptionHandler
   */
     protected function unauthenticated($request, AuthenticationException $exception)
     {
+        ray(debug_backtrace());
+        ray('unauthenticated');
         if ($request->expectsJson()) {
             return response()->json(['error' => 'Unauthorized or unauthenticated.'], 401);
         }
