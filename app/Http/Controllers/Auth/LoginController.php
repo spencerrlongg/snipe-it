@@ -55,7 +55,7 @@ class LoginController extends Controller
     {
         parent::__construct();
         $this->middleware('guest', ['except' => ['logout', 'postTwoFactorAuth', 'getTwoFactorAuth', 'getTwoFactorEnroll']]);
-        // Session::put('backUrl', \URL::previous());
+        Session::put('backUrl', \URL::previous());
         // $this->ldap = $ldap;
         $this->saml = $saml;
     }
@@ -337,12 +337,13 @@ class LoginController extends Controller
             $user->save();
         }
         // Redirect to the users page
-        if ($request->expectsJson()) {
-            $token = $user->createToken('snipe-it-mobile')->accessToken;
-            return response()->json(['token' => $token]);
-        } else {
-            return redirect()->intended()->with('success', trans('auth/message.signin.success')); 
-        }
+        // if ($request->expectsJson()) {
+        //     $token = $user->createToken('snipe-it-mobile')->accessToken;
+        //     return response()->json(['token' => $token]);
+        // } else {
+        //     return redirect()->intended()->with('success', trans('auth/message.signin.success')); 
+        // }
+        return redirect()->intended()->with('success', trans('auth/message.signin.success'));  
     }
 
 

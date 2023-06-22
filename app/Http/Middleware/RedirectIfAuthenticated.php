@@ -17,7 +17,7 @@ class RedirectIfAuthenticated
      */
     public function handle($request, Closure $next, $guard = null)
     {
-        return 'poo';
+        // return 'poo';
     //    if ($request->acceptsJson()) {
     //         return response()->json(['success' => 'success'], 200);
     //    } 

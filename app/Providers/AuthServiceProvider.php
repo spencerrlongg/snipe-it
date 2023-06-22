@@ -89,9 +89,9 @@ class AuthServiceProvider extends ServiceProvider
 
         $this->registerPolicies();
        
-        Auth::extend('mobile', function() {
-           // blah 
-        });
+        // Auth::extend('mobile', function() {
+        //    // blah 
+        // });
 
         Passport::routes();
         Passport::tokensExpireIn(Carbon::now()->addYears(config('passport.expiration_years')));
