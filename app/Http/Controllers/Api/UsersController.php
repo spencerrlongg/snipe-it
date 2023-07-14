@@ -80,9 +80,10 @@ class UsersController extends Controller
 
         if (($request->filled('deleted')) && ($request->input('deleted') == 'true')) {
             $users = $users->onlyTrashed();
-        } elseif (($request->filled('all')) && ($request->input('all') == 'true')) {
+        } elseif (($request->filled('deleted') && ($request->input('deleted')) == 'false')) {
             $users = $users->withTrashed();
         }
+ 
 
         if ($request->filled('activated')) {
             $users = $users->where('users.activated', '=', $request->input('activated'));
@@ -193,7 +194,15 @@ class UsersController extends Controller
         }
 
         if ($request->filled('search')) {
-            $users = $users->TextSearch($request->input('search'));
+            if ($request->input('deleted') == true) {
+                ray('deleted'); 
+                $deletedUsers = $users->onlyTrashed(); 
+                $users = $deletedUsers->TextSearch($request->input('search'));
+            }
+           elseif ($request->input('deleted') == false) {
+                $activeUsers = $users->withoutTrashed(); 
+                $users = $activeUsers->TextSearch($request->input('search'));
+            } 
         }
 
         $order = $request->input('order') === 'asc' ? 'asc' : 'desc';
