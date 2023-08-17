@@ -10,6 +10,7 @@ use App\Models\Company;
 use App\Models\Location;
 use App\Models\SnipeModel;
 use App\Models\User;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
 use Lorisleiva\Actions\Concerns\AsAction;
 
@@ -25,6 +26,7 @@ class CreateAsset
 
     public function handle($validatedAttributes): SnipeModel|bool
     {
+        //TODO: this needs to be refactored as we're not direction using the request anymore, but the validated attributes
         $asset = new Asset();
         $asset->model()->associate(AssetModel::find((int) $request->get('model_id')));
 
