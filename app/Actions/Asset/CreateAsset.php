@@ -28,8 +28,9 @@ class CreateAsset
     {
         $validatedAttributesCollection = collect($validatedAttributes);
         //TODO: this needs to be refactored as we're not direction using the request anymore, but the validated attributes
+        //So what do we do about attributes that aren't validated? Does this mean we always *have* to validate every attribute?
         $asset = new Asset();
-        $asset->model()->associate(AssetModel::find((int) $validatedAttributes['model_id']));
+        $asset->model()->associate(AssetModel::find((int) $validatedAttributesCollection->get('model_id')));
 
         //$asset->name                    = $request->get('name');
         //$asset->serial                  = $request->get('serial');
