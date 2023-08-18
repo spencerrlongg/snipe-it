@@ -15,8 +15,8 @@ class StoreAssetRequest extends ImageUploadRequest
      */
     public function authorize(): bool
     {
-        //return false;
-        Gate::allows('create', Asset::class);
+        //TODO: make sure this works
+         return Gate::allows('create', new Asset);
     }
 
     /**
@@ -26,7 +26,7 @@ class StoreAssetRequest extends ImageUploadRequest
      */
     public function rules(): array
     {
-        array_merge(
+        return array_merge(
             (new Asset)->getRules(),
             parent::rules()
         );

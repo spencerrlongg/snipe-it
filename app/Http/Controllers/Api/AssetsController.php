@@ -540,7 +540,8 @@ class AssetsController extends Controller
             return response()->json(Helper::formatStandardApiResponse('success', $asset, trans('admin/hardware/message.create.success')));
         } else {
             //this won't return an $asset now, so no errors, need to figure that out - might be fine because of form request
-            return response()->json(Helper::formatStandardApiResponse('error', null, $asset->getErrors()), 200);
+            //so form request should be returning validation errors here - need to figure something else out for others
+            return response()->json(Helper::formatStandardApiResponse('error', null, ['error' => 'There was an error creating the asset. Please try again.', 'code' => 422]), 200);
         }
     }
 

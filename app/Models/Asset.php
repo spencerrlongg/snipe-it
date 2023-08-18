@@ -99,7 +99,7 @@ class Asset extends Depreciable
         'expected_checkin' => 'date|nullable',
         'location_id'     => 'exists:locations,id|nullable',
         'rtd_location_id' => 'exists:locations,id|nullable',
-        'asset_tag'       => 'required|min:1|max:255|unique_undeleted',
+        'asset_tag'       => 'required|min:1|max:255|unique:assets,asset_tag',
         'purchase_date'   => 'date|date_format:Y-m-d|nullable',
         'serial'          => 'unique_serial|nullable',
         'purchase_cost'   => 'numeric|nullable|gte:0',
