@@ -106,11 +106,14 @@ class AssetsController extends Controller
      */
     public function store(ImageUploadRequest $request)
     {
-        $this->authorize(Asset::class);
+        //going to comment things that have been moved to the new action
+        //this should be in the form request
+        //$this->authorize(Asset::class);
 
         // Handle asset tags - there could be one, or potentially many.
         // This is only necessary on create, not update, since bulk editing is handled
         // differently
+        //TODO: this is for creating multiple assets in the gui - should be easy enough to handle in the action
         $asset_tags = $request->input('asset_tags');
 
         $settings = Setting::getSettings();
@@ -132,32 +135,38 @@ class AssetsController extends Controller
                 $asset->asset_tag = $asset_tags[$a];
             }
 
-            $asset->company_id              = Company::getIdForCurrentUser($request->input('company_id'));
-            $asset->model_id                = $request->input('model_id');
-            $asset->order_number            = $request->input('order_number');
-            $asset->notes                   = $request->input('notes');
-            $asset->user_id                 = Auth::id();
-            $asset->archived                = '0';
-            $asset->physical                = '1';
-            $asset->depreciate              = '0';
-            $asset->status_id               = request('status_id');
-            $asset->warranty_months         = request('warranty_months', null);
-            $asset->purchase_cost           = request('purchase_cost');
-            $asset->purchase_date           = request('purchase_date', null);
-            $asset->asset_eol_date          = request('asset_eol_date', $asset->present()->eol_date());
-            $asset->assigned_to             = request('assigned_to', null);
-            $asset->supplier_id             = request('supplier_id', null);
-            $asset->requestable             = request('requestable', 0);
-            $asset->rtd_location_id         = request('rtd_location_id', null);
-            $asset->byod                    = request('byod', 0);
+            //these should be more or less the same in the action
 
+            //$asset->company_id              = Company::getIdForCurrentUser($request->input('company_id'));
+            //$asset->model_id                = $request->input('model_id');
+            //$asset->order_number            = $request->input('order_number');
+            //$asset->notes                   = $request->input('notes');
+            //$asset->user_id                 = Auth::id();
+            //$asset->archived                = '0';
+            //$asset->physical                = '1';
+            //$asset->depreciate              = '0';
+            //$asset->status_id               = request('status_id');
+            //$asset->warranty_months         = request('warranty_months', null);
+            //$asset->purchase_cost           = request('purchase_cost');
+            //$asset->purchase_date           = request('purchase_date', null);
+            //$asset->asset_eol_date          = request('asset_eol_date', $asset->present()->eol_date());
+            //$asset->assigned_to             = request('assigned_to', null);
+            //$asset->supplier_id             = request('supplier_id', null);
+            //$asset->requestable             = request('requestable', 0);
+            //$asset->rtd_location_id         = request('rtd_location_id', null);
+            //$asset->byod                    = request('byod', 0);
+
+            //TODO: is there a reason this wasn't in the api store method?
             if (! empty($settings->audit_interval)) {
                 $asset->next_audit_date = Carbon::now()->addMonths($settings->audit_interval)->toDateString();
             }
 
+            //TODO: is there any reason this wasn't in the api store method?
             if ($asset->assigned_to == '') {
                 $asset->location_id = $request->input('rtd_location_id', null);
             }
+
+            //alright, here on down is more or less the same
 
             // Create the image (if one was chosen.)
             if ($request->has('image')) {
@@ -167,6 +176,7 @@ class AssetsController extends Controller
             // Update custom fields in the database.
             // Validation for these fields is handled through the AssetRequest form request
             $model = AssetModel::find($request->get('model_id'));
+
 
             if (($model) && ($model->fieldset)) {
                 foreach ($model->fieldset->fields as $field) {

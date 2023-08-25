@@ -2,16 +2,14 @@
 
 namespace App\Actions\Asset;
 
-use App\Helpers\Helper;
-use App\Http\Requests\ImageUploadRequest;
 use App\Models\Asset;
 use App\Models\AssetModel;
 use App\Models\Company;
-use App\Models\Location;
 use App\Models\SnipeModel;
-use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Crypt;
 use Lorisleiva\Actions\Concerns\AsAction;
 
 class CreateAsset
@@ -47,11 +45,11 @@ class CreateAsset
         $asset->notes = $validatedAttributesCollection->get('notes');
         $asset->asset_tag = $validatedAttributesCollection->get('asset_tag', Asset::autoincrement_asset());
         // NO IT IS NOT!!! This is never firing; we SHOW the asset_tag you're going to get, so it *will* be filled in!
-        //$asset->user_id                 = Auth::id();
-        //$asset->archived                = '0';
-        //$asset->physical                = '1';
-        //$asset->depreciate              = '0';
-        //$asset->status_id               = $request->get('status_id', 0);
+        $asset->user_id                 = Auth::id();
+        $asset->archived                = '0';
+        $asset->physical                = '1';
+        $asset->depreciate              = '0';
+        $asset->status_id               = $validatedAttributesCollection->get('status_id', 0);
         $asset->status_id = $validatedAttributesCollection->get('status_id', null);
         //$asset->warranty_months         = $request->get('warranty_months', null);
         //$asset->purchase_cost           = $request->get('purchase_cost');
@@ -70,7 +68,9 @@ class CreateAsset
          * this is here just legacy reasons. Api\AssetController
          * used image_source  once to allow encoded image uploads.
          */
-        //TODO: come back to this
+        //TODO: hm, this is all based on the request, which we're not using anymore here...
+        //maybe this gets moved up to the request level?
+        //the way it's working in the first place is kind of a weird way to do it
         //if ($request->has('image_source')) {
         //    $request->offsetSet('image', $request->offsetGet('image_source'));
         //}
@@ -81,33 +81,25 @@ class CreateAsset
         // Validation for these fields is handled through the AssetRequest form request
         $model = AssetModel::find($validatedAttributesCollection->get('model_id'));
 
+
         if (($model) && ($model->fieldset)) {
             foreach ($model->fieldset->fields as $field) {
-
-                // Set the field value based on what was sent in the request
-                $field_val = $validatedAttributesCollection->get($field->db_column, null);
-
-                // If input value is null, use custom field's default value
-                if ($field_val == null) {
-                    \Log::debug('Field value for '.$field->db_column.' is null');
-                    $field_val = $field->defaultValue($validatedAttributesCollection->get('model_id'));
-                    \Log::debug('Use the default fieldset value of '.$field->defaultValue($validatedAttributesCollection->get('model_id')));
-                }
-
-                // if the field is set to encrypted, make sure we encrypt the value
                 if ($field->field_encrypted == '1') {
-                    \Log::debug('This model field is encrypted in this fieldset.');
-
                     if (Gate::allows('admin')) {
-
-                        // If input value is null, use custom field's default value
-                        if (($field_val == null) && ($validatedAttributesCollection->has('model_id') != '')) {
-                            $field_val = \Crypt::encrypt($field->defaultValue($validatedAttributesCollection->get('model_id')));
+                        if ($validatedAttributesCollection->has('model_id') != '') {
+                            $asset->{$field->db_column} = Crypt::encrypt($field->defaultValue($validatedAttributesCollection->get('model_id')));
                         } else {
-                            $field_val = \Crypt::encrypt($validatedAttributesCollection->get($field->db_column));
+                            $asset->{$field->db_column} = Crypt::encrypt($validatedAttributesCollection->get($field->db_column));
                         }
                     }
                 }
+                // If input value is null, use custom field's default value
+                if ($field_val == null) {
+                    Log::debug('Field value for '.$field->db_column.' is null');
+                    $field_val = $field->defaultValue($validatedAttributesCollection->get('model_id'));
+                    Log::debug('Use the default fieldset value of '.$field->defaultValue($validatedAttributesCollection->get('model_id')));
+                }
+
 
 
                 $asset->{$field->db_column} = $field_val;
@@ -125,6 +117,7 @@ class CreateAsset
             //if (isset($target)) {
             //    $asset->checkOut($target, Auth::user(), date('Y-m-d H:i:s'), '', 'Checked out on asset creation', e($request->get('name')));
             //}
+            switch ()
 
             if ($asset->image) {
                 $asset->image = $asset->getImageUrl();
