@@ -532,6 +532,7 @@ class AssetsController extends Controller
      * @since [v4.0]
      */
     //this is now going to return 422 on validation errors, so that should be accounted for
+    //and i love it
     public function store(StoreAssetRequest $request): JsonResponse
     {
         $asset = CreateAsset::run($request->validated());
