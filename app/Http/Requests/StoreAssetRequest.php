@@ -29,7 +29,6 @@ class StoreAssetRequest extends ImageUploadRequest
                 ]);
             }
         }
-        Log::alert($this->asset_tags);
         //if any request attributes start with "_snipeit_", merge them into the rules array
         //and get the validation rules from the db model
         //actually, looks like brady's new trait might handle this and we can remove custom field validation from the actions

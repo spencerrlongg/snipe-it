@@ -22,10 +22,10 @@ class CreateAsset
         return Gate::allows('create', Asset::class);
     }
 
-    public function handle($validatedAttributes): SnipeModel|bool
+    public function handle($validatedAttributes): array
     {
+        $assets = [];
         $validatedAttributesCollection = collect($validatedAttributes);
-        //TODO: this needs to be refactored as we're not direction using the request anymore, but the validated attributes
         //So what do we do about attributes that aren't validated? Does this mean we always *have* to validate every attribute? yeah, probably
         //but maybe that's fine?
         //TODO: this needs to take an array of asset_tags - fixed, see request
@@ -39,7 +39,6 @@ class CreateAsset
             $asset->model_id = $validatedAttributesCollection->get('model_id');
             $asset->order_number = $validatedAttributesCollection->get('order_number');
             $asset->notes = $validatedAttributesCollection->get('notes');
-            //TODO: might be able to do something clever on the request for this
             $asset->asset_tag = $asset_tag ?? Asset::autoincrement_asset();
             // NO IT IS NOT!!! This is never firing; we SHOW the asset_tag you're going to get, so it *will* be filled in!
             $asset->user_id = Auth::id();
@@ -100,6 +99,12 @@ class CreateAsset
                 }
             }
             //TODO: refactor to a switch calling action classes
+
+
+            $assets[] = $asset;
+
+
+
             if ($asset->save()) {
                 //if ($request->get('assigned_user')) {
                 //    $target = User::find(request('assigned_user'));
@@ -115,19 +120,15 @@ class CreateAsset
                 if ($asset->image) {
                     $asset->image = $asset->getImageUrl();
                 }
-                return $asset;
+                return $assets;
 
                 //
             }
         }
-        //TODO: so, this is all great in theory except for when the _model_ level validation fails, we'll *have* to enable exception on failure for this to work
-        //otherwise, it'll get a little messy - i assume just throwing the exception will be fine, but we'll see...
-        //because something has to be returned from here...
-        \Log::alert(var_dump($asset->getErrors()));
-        return false;
+        return $assets;
+        //\Log::alert(var_dump($asset->getErrors()));
 
 
-        //
     }
 
 
