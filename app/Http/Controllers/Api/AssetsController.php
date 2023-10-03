@@ -575,6 +575,9 @@ class AssetsController extends Controller
 
         // Update custom fields in the database.
         // Validation for these fields is handled through the AssetRequest form request
+        if(!(gettype($request->get('model_id')) == 'integer')) {
+            return response()->json(Helper::formatStandardApiResponse('error', null, 'The model id must be an integer', 200));
+        }
         $model = AssetModel::find($request->get('model_id'));
 
         if (($model) && ($model->fieldset)) {
