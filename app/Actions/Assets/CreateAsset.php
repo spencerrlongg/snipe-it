@@ -14,39 +14,53 @@ class CreateAsset
 {
     use AsAction;
 
-    public function handle($validatedAttributes)
+    private $id;
+    public function handle(
+                           $model_id = null,
+                           $name = null,
+                           $serial = null,
+                           $company_id = null,
+                           $asset_tag = null,
+                           $order_number = null,
+                           $notes = null,
+                           $user_id = null,
+                           $status_id = null,
+                           $warranty_months = null,
+                           $purchase_cost = null,
+                           $asset_eol_date = null,
+                           $purchase_date = null,
+                           $assigned_to = null,
+                           $supplier_id = null,
+                           $requestable = null,
+                           $rtd_location_id = null,
+    )
     {
-        $validatedAttributesCollection = collect($validatedAttributes);
         //So what do we do about attributes that aren't validated? Does this mean we always *have* to validate every attribute? yeah, probably
         //but maybe that's fine?
-        //TODO: this needs to take an array of asset_tags - fixed, see request
-        $asset = new Asset();
-        $asset->model()->associate(AssetModel::find((int)$validatedAttributesCollection->get('model_id')));
-
-        $asset->name = $validatedAttributesCollection->get('name');
-        $asset->serial = $validatedAttributesCollection->get('serial');
-        $asset->company_id = Company::getIdForCurrentUser($validatedAttributesCollection->get('company_id'));
-        $asset->model_id = $validatedAttributesCollection->get('model_id');
-        $asset->order_number = $validatedAttributesCollection->get('order_number');
-        $asset->notes = $validatedAttributesCollection->get('notes');
-        $asset->asset_tag = $asset_tag ?? Asset::autoincrement_asset();
-        // NO IT IS NOT!!! This is never firing; we SHOW the asset_tag you're going to get, so it *will* be filled in!
-        $asset->user_id = Auth::id();
-        $asset->archived = '0';
-        $asset->physical = '1';
-        $asset->depreciate = '0';
-        $asset->status_id = $validatedAttributesCollection->get('status_id', 0);
-        $asset->status_id = $validatedAttributesCollection->get('status_id', null);
-        //$asset->warranty_months         = $request->get('warranty_months', null);
-        //$asset->purchase_cost           = $request->get('purchase_cost');
-        //$asset->asset_eol_date          = $request->get('asset_eol_date', $asset->present()->eol_date());
-        //$asset->purchase_date           = $request->get('purchase_date', null);
-        //$asset->assigned_to             = $request->get('assigned_to', null);
-        //$asset->supplier_id             = $request->get('supplier_id');
-        //$asset->requestable             = $request->get('requestable', 0);
-        //$asset->rtd_location_id         = $request->get('rtd_location_id', null);
-        //$asset->location_id             = $request->get('rtd_location_id', null);
-
+        $asset = Asset::create([
+            'name' => $name,
+            'serial' => $serial,
+            'company_id' => Company::getIdForCurrentUser($company_id),
+            'asset_tag' => $asset_tag ?? Asset::autoincrement_asset(),
+            'order_number' => $order_number,
+            'notes' => $notes,
+            'user_id' => $user_id ?? Auth::id(),
+            'archived' => '0',
+            'physical' => '1',
+            'depreciate' => '0',
+            'status_id' => $status_id ?? 0,
+            'warranty_months' => $warranty_months,
+            'purchase_cost' => $purchase_cost,
+            'purchase_date' => $purchase_date,
+            'assigned_to' => $assigned_to,
+            'supplier_id' => $supplier_id,
+            'requestable' => $requestable ?? 0,
+            'rtd_location_id' => $rtd_location_id,
+            'location_id' => $rtd_location_id,
+        ]);
+        $model = AssetModel::find($model_id);
+        $asset->model()->associate($model);
+        $asset->asset_eol_date = $asset_eol_date ?? $asset->present()->eol_date());
 
         /**
          * this is here just legacy reasons. Api\AssetController
@@ -63,14 +77,14 @@ class CreateAsset
 
         // Update custom fields in the database.
         // Validation for these fields is handled through the AssetRequest form request
-        $model = AssetModel::find($validatedAttributesCollection->get('model_id'));
+
 
 
         if (($model) && ($model->fieldset)) {
             foreach ($model->fieldset->fields as $field) {
                 if ($field->field_encrypted == '1') {
                     if (Gate::allows('admin')) {
-                        if ($validatedAttributesCollection->has('model_id') != '') {
+                        if ($model_id) {
                             $asset->{$field->db_column} = Crypt::encrypt($field->defaultValue($validatedAttributesCollection->get('model_id')));
                         } else {
                             $asset->{$field->db_column} = Crypt::encrypt($validatedAttributesCollection->get($field->db_column));
@@ -95,16 +109,16 @@ class CreateAsset
 
 
 
-        if ($asset->save()) {
-            //if ($request->get('assigned_user')) {
-            //    $target = User::find(request('assigned_user'));
-            //} elseif ($request->get('assigned_asset')) {
+        if ($asset) {
+            if ($validatedAttributesCollection->get('assigned_user')) {
+                $target = User::find(request('assigned_user'));
+            } //elseif ($request->get('assigned_asset')) {
             //    $target = Asset::find(request('assigned_asset'));
             //} elseif ($request->get('assigned_location')) {
             //    $target = Location::find(request('assigned_location'));
             //}
             //if (isset($target)) {
-            //    $asset->checkOut($target, Auth::user(), date('Y-m-d H:i:s'), '', 'Checked out on asset creation', e($request->get('name')));
+                $asset->checkOut($target, Auth::user(), date('Y-m-d H:i:s'), '', 'Checked out on asset creation', e($request->get('name')));
             //}
 
             if ($asset->image) {
@@ -118,5 +132,12 @@ class CreateAsset
         //\Log::alert(var_dump($asset->getErrors()));
 
 
+    }
+    public function manaul($id)
+    {
+        Validator::creete([
+            'id' => 'required|integer',
+        ])->validate();
+        $this->id = $id;
     }
 }

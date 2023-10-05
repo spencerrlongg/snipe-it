@@ -46,8 +46,6 @@ class StoreAssetRequest extends ImageUploadRequest
             //from the parent class (ImageUploadRequest)
             parent::rules(),
             [
-                'asset_tags' => 'array',
-                'asset_tags.*' => 'string|max:255',
             ]
         );
     }

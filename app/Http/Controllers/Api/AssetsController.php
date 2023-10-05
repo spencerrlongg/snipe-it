@@ -537,7 +537,7 @@ class AssetsController extends Controller
      */
     public function store(StoreAssetRequest $request): JsonResponse
     {
-        $asset = CreateAsset::run($request->validated());
+        $asset = CreateAsset::run(...$request->validated());
 
         if($asset) {
             return response()->json(Helper::formatStandardApiResponse('success', $asset, trans('admin/hardware/message.create.success')));
