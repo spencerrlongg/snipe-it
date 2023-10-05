@@ -14,7 +14,6 @@ class CreateAsset
 {
     use AsAction;
 
-    private $id;
     public function handle(
                            $model_id = null,
                            $name = null,
@@ -79,16 +78,14 @@ class CreateAsset
         // Update custom fields in the database.
         // Validation for these fields is handled through the AssetRequest form request
 
-
-
         if (($model) && ($model->fieldset)) {
             foreach ($model->fieldset->fields as $field) {
                 if ($field->field_encrypted == '1') {
                     if (Gate::allows('admin')) {
                         if ($model_id) {
-                            $asset->{$field->db_column} = Crypt::encrypt($field->defaultValue($validatedAttributesCollection->get('model_id')));
+                            $asset->{$field->db_column} = Crypt::encrypt($field->defaultValue($model_id));
                         } else {
-                            $asset->{$field->db_column} = Crypt::encrypt($validatedAttributesCollection->get($field->db_column));
+                            $asset->{$field->db_column} = Crypt::encrypt($model_id);
                         }
                     }
                 }
@@ -103,14 +100,8 @@ class CreateAsset
                 //$asset->{$field->db_column} = $field_val;
             }
         }
-        //TODO: refactor to a switch calling action classes
-
-
-        $assets[] = $asset;
-
-
-
         if ($asset->save()) {
+            //TODO: refactor to a switch calling action classes
             //if ($validatedAttributesCollection->get('assigned_user')) {
             //    $target = User::find(request('assigned_user'));
             //}
@@ -127,11 +118,7 @@ class CreateAsset
                 $asset->image = $asset->getImageUrl();
             }
             return $asset;
-
-            //
         }
         return $asset;
-
-
     }
 }
