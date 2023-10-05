@@ -110,7 +110,7 @@ class CreateAsset
 
 
 
-        if ($asset) {
+        if ($asset->save()) {
             //if ($validatedAttributesCollection->get('assigned_user')) {
             //    $target = User::find(request('assigned_user'));
             //}
