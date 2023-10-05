@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Actions\Asset\CreateAsset;
+use App\Actions\Assets\CreateAsset;
 use App\Events\CheckoutableCheckedIn;
 use App\Http\Requests\StoreAssetRequest;
 use Illuminate\Http\JsonResponse;
