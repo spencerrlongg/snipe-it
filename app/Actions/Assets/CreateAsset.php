@@ -33,6 +33,7 @@ class CreateAsset
                            $supplier_id = null,
                            $requestable = null,
                            $rtd_location_id = null,
+                           $location_id = null, //do something with this
     )
     {
         //So what do we do about attributes that aren't validated? Does this mean we always *have* to validate every attribute? yeah, probably
@@ -60,7 +61,7 @@ class CreateAsset
         ]);
         $model = AssetModel::find($model_id);
         $asset->model()->associate($model);
-        $asset->asset_eol_date = $asset_eol_date ?? $asset->present()->eol_date());
+        $asset->asset_eol_date = $asset_eol_date ?? $asset->present()->eol_date();
 
         /**
          * this is here just legacy reasons. Api\AssetController
@@ -110,34 +111,27 @@ class CreateAsset
 
 
         if ($asset) {
-            if ($validatedAttributesCollection->get('assigned_user')) {
-                $target = User::find(request('assigned_user'));
-            } //elseif ($request->get('assigned_asset')) {
+            //if ($validatedAttributesCollection->get('assigned_user')) {
+            //    $target = User::find(request('assigned_user'));
+            //}
+            //elseif ($request->get('assigned_asset')) {
             //    $target = Asset::find(request('assigned_asset'));
             //} elseif ($request->get('assigned_location')) {
             //    $target = Location::find(request('assigned_location'));
             //}
             //if (isset($target)) {
-                $asset->checkOut($target, Auth::user(), date('Y-m-d H:i:s'), '', 'Checked out on asset creation', e($request->get('name')));
+            //    $asset->checkOut($target, Auth::user(), date('Y-m-d H:i:s'), '', 'Checked out on asset creation', e($request->get('name')));
             //}
 
             if ($asset->image) {
                 $asset->image = $asset->getImageUrl();
             }
-            return $assets;
+            return $asset;
 
             //
         }
-        return $assets;
-        //\Log::alert(var_dump($asset->getErrors()));
+        return $asset;
 
 
-    }
-    public function manaul($id)
-    {
-        Validator::creete([
-            'id' => 'required|integer',
-        ])->validate();
-        $this->id = $id;
     }
 }

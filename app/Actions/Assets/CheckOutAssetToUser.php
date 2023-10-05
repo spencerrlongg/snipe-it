@@ -8,10 +8,8 @@ class CheckOutAssetToUser
 {
     use AsAction;
 
-    public function handle($asset, $user, $notes = null)
+    public function handle()
     {
-        CreateAsset::run(
-            id: $id,
-        );
+        // ...
     }
 }
