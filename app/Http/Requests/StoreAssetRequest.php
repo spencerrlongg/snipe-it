@@ -21,14 +21,6 @@ class StoreAssetRequest extends ImageUploadRequest
 
     public function prepareForValidation(): void
     {
-        //this turns the singular asset_tag into an array of asset_tags even though we only have one to clean the action
-        if($this->has('asset_tag')) {
-            if(!is_array($this->get('asset_tag'))) {
-                $this->merge([
-                    'asset_tags' => [$this->get('asset_tag')]
-                ]);
-            }
-        }
         //if any request attributes start with "_snipeit_", merge them into the rules array
         //and get the validation rules from the db model
         //actually, looks like brady's new trait might handle this and we can remove custom field validation from the actions
