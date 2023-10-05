@@ -2,27 +2,53 @@
 
 namespace App\Http\Requests;
 
+use App\Models\Asset;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Support\Facades\Gate;
 
-class StoreAssetRequest extends FormRequest
+class StoreAssetRequest extends ImageUploadRequest
 {
     /**
      * Determine if the user is authorized to make this request.
+     *
+     * @return bool
      */
     public function authorize(): bool
     {
-        return false;
+        //TODO: make sure this works
+        return Gate::allows('create', new Asset);
+    }
+
+    public function prepareForValidation(): void
+    {
+        //if any request attributes start with "_snipeit_", merge them into the rules array
+        //and get the validation rules from the db model
+        //actually, looks like brady's new trait might handle this and we can remove custom field validation from the actions
+        //foreach ($this->all() as $key => $value) {
+        //    if (str_starts_with($key, '_snipeit_')) {
+        //        $this->merge([
+        //            $key  => $value
+        //        ]);
+        //    }
+        //}
     }
 
     /**
      * Get the validation rules that apply to the request.
      *
-     * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array|string>
+     * @return array
      */
     public function rules(): array
     {
-        return [
-            //
-        ];
+        return array_merge(
+        //from the model validation rules
+            (new Asset)->getRules(),
+            //from the parent class (ImageUploadRequest)
+            parent::rules(),
+            [
+                'asset_tags' => 'array',
+                'asset_tags.*' => 'string|max:255',
+            ]
+        );
     }
 }

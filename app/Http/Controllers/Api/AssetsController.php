@@ -535,9 +535,7 @@ class AssetsController extends Controller
      * @since [v4.0]
      * @return JsonResponse
      */
-    public function store(ImageUploadRequest $request)
-    {
-        public function store(StoreAssetRequest $request): JsonResponse
+    public function store(StoreAssetRequest $request): JsonResponse
     {
         $asset = CreateAsset::run($request->validated());
 
@@ -548,7 +546,6 @@ class AssetsController extends Controller
             //so form request should be returning validation errors here - need to figure something else out for others
             return response()->json(Helper::formatStandardApiResponse('error', null, ['error' => 'There was an error creating the asset. Please try again.', 'code' => 422]), 200);
         }
-    }
     }
 
 
