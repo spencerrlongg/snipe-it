@@ -15,29 +15,30 @@ class CreateAsset
     use AsAction;
 
     public function handle(
-                           $model_id = null,
-                           $name = null,
-                           $serial = null,
-                           $company_id = null,
-                           $asset_tag = null,
-                           $order_number = null,
-                           $notes = null,
-                           $user_id = null,
-                           $status_id = null,
-                           $warranty_months = null,
-                           $purchase_cost = null,
-                           $asset_eol_date = null,
-                           $purchase_date = null,
-                           $assigned_to = null,
-                           $supplier_id = null,
-                           $requestable = null,
-                           $rtd_location_id = null,
-                           $location_id = null, //do something with this
+       $model_id,
+       $status_id,
+       $name = null,
+       $serial = null,
+       $company_id = null,
+       $asset_tag = null,
+       $order_number = null,
+       $notes = null,
+       $user_id = null,
+       $warranty_months = null,
+       $purchase_cost = null,
+       $asset_eol_date = null,
+       $purchase_date = null,
+       $assigned_to = null,
+       $supplier_id = null,
+       $requestable = null,
+       $rtd_location_id = null,
+       $location_id = null, //do something with this
+       $files = null,
     )
     {
         //So what do we do about attributes that aren't validated? Does this mean we always *have* to validate every attribute? yeah, probably
         //but maybe that's fine?
-        $asset = Asset::create([
+        $asset = Asset::make([
             'name' => $name,
             'serial' => $serial,
             'company_id' => Company::getIdForCurrentUser($company_id),
@@ -78,6 +79,7 @@ class CreateAsset
         // Update custom fields in the database.
         // Validation for these fields is handled through the AssetRequest form request
 
+        //TODO: check brady's stuff to see if it removes the need for all of this
         if (($model) && ($model->fieldset)) {
             foreach ($model->fieldset->fields as $field) {
                 if ($field->field_encrypted == '1') {

@@ -21,16 +21,7 @@ class StoreAssetRequest extends ImageUploadRequest
 
     public function prepareForValidation(): void
     {
-        //if any request attributes start with "_snipeit_", merge them into the rules array
-        //and get the validation rules from the db model
-        //actually, looks like brady's new trait might handle this and we can remove custom field validation from the actions
-        //foreach ($this->all() as $key => $value) {
-        //    if (str_starts_with($key, '_snipeit_')) {
-        //        $this->merge([
-        //            $key  => $value
-        //        ]);
-        //    }
-        //}
+    //
     }
 
     /**
@@ -40,13 +31,19 @@ class StoreAssetRequest extends ImageUploadRequest
      */
     public function rules(): array
     {
-        return array_merge(
-        //from the model validation rules
+        $rules = array_merge(
             (new Asset)->getRules(),
-            //from the parent class (ImageUploadRequest)
             parent::rules(),
-            [
-            ]
         );
+
+        if(!$this->expectsJson()) {
+            //accepts an array for the gui form
+            $rules['asset_tags.*'] = $rules['asset_tag'];
+            unset($rules['asset_tag']);
+            $rules['serials.*'] = $rules['serial'];
+            unset($rules['serial']);
+        }
+
+        return $rules;
     }
 }

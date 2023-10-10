@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers\Assets;
 
+use App\Actions\Assets\CreateAsset;
 use App\Helpers\Helper;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\ImageUploadRequest;
+use App\Http\Requests\StoreAssetRequest;
 use App\Models\Actionlog;
 use App\Models\Asset;
 use App\Models\AssetModel;
@@ -18,6 +20,7 @@ use App\View\Label;
 use Auth;
 use Carbon\Carbon;
 use DB;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
@@ -104,19 +107,32 @@ class AssetsController extends Controller
      * @since [v1.0]
      * @return Redirect
      */
-    public function store(ImageUploadRequest $request)
+    public function store(StoreAssetRequest $request): RedirectResponse
     {
-        $this->authorize(Asset::class);
+        $asset_tags = $request->input('asset_tags');
+        $serials = $request->input('serials');
+        for ($a = 1; $a <= count($asset_tags); $a++) {
+            $asset = CreateAsset::run(...$request->validated(), asset_tag: $asset_tags[$a], serial: $serials[$a]);
+
+        }
+
+        return redirect()->route('hardware.index')->with('success', trans('admin/hardware/message.create.success'));
+
+
+
+
+
+
+
+
 
         // Handle asset tags - there could be one, or potentially many.
         // This is only necessary on create, not update, since bulk editing is handled
         // differently
-        $asset_tags = $request->input('asset_tags');
 
         $settings = Setting::getSettings();
 
         $success = false;
-        $serials = $request->input('serials');
 
         for ($a = 1; $a <= count($asset_tags); $a++) {
             $asset = new Asset();
@@ -131,25 +147,6 @@ class AssetsController extends Controller
             if (($asset_tags) && (array_key_exists($a, $asset_tags))) {
                 $asset->asset_tag = $asset_tags[$a];
             }
-
-            $asset->company_id              = Company::getIdForCurrentUser($request->input('company_id'));
-            $asset->model_id                = $request->input('model_id');
-            $asset->order_number            = $request->input('order_number');
-            $asset->notes                   = $request->input('notes');
-            $asset->user_id                 = Auth::id();
-            $asset->archived                = '0';
-            $asset->physical                = '1';
-            $asset->depreciate              = '0';
-            $asset->status_id               = request('status_id');
-            $asset->warranty_months         = request('warranty_months', null);
-            $asset->purchase_cost           = request('purchase_cost');
-            $asset->purchase_date           = request('purchase_date', null);
-            $asset->asset_eol_date          = request('asset_eol_date', $asset->present()->eol_date());
-            $asset->assigned_to             = request('assigned_to', null);
-            $asset->supplier_id             = request('supplier_id', null);
-            $asset->requestable             = request('requestable', 0);
-            $asset->rtd_location_id         = request('rtd_location_id', null);
-            $asset->byod                    = request('byod', 0);
 
             if (! empty($settings->audit_interval)) {
                 $asset->next_audit_date = Carbon::now()->addMonths($settings->audit_interval)->toDateString();
@@ -212,9 +209,6 @@ class AssetsController extends Controller
 
         if ($success) {
             // Redirect to the asset listing page
-            $minutes = 518400;
-            // dd( $_POST['options']);
-            // Cookie::queue(Cookie::make('optional_info', json_decode($_POST['options']), $minutes));
             return redirect()->route('hardware.index')
                 ->with('success', trans('admin/hardware/message.create.success'));
                
