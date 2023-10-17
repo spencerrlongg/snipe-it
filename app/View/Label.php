@@ -104,7 +104,7 @@ class Label implements View
                     $logo = null;
 
                     // Should we use the assets assigned company logo? (A.K.A. "Is `Labels > Use Asset Logo` enabled?"), and do we have a company logo?
-                    if ($settings->label2_asset_logo && $asset->company && $asset->company->image!='') {
+                    if ($settings->label2_asset_logo && $asset->company && !empty($asset->company->image)) {
                         $logo = Storage::disk('public')->path('companies/'.e($asset->company->image));
                     } elseif (!empty($settings->label_logo)) {
                         // Use the general site label logo, if available
