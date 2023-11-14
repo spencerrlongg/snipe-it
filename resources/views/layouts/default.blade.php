@@ -30,7 +30,8 @@
     </script>
 
     {{-- stylesheets --}}
-    <link rel="stylesheet" href="{{ url(mix('css/dist/all.css')) }}">
+{{--    <link rel="stylesheet" href="{{ url(mix('css/dist/all.css')) }}">--}}
+    @vite(['public/css/build/all.css', 'public/js/snipeit.js'])
     @if (($snipeSettings) && ($snipeSettings->allow_user_skin==1) && Auth::check() && Auth::user()->present()->skin != '')
         <link rel="stylesheet" href="{{ url(mix('css/dist/skins/skin-'.Auth::user()->present()->skin.'.min.css')) }}">
     @else
