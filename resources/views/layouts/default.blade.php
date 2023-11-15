@@ -31,7 +31,10 @@
 
     {{-- stylesheets --}}
 {{--    <link rel="stylesheet" href="{{ url(mix('css/dist/all.css')) }}">--}}
-    @vite(['public/css/build/all.css', 'public/js/snipeit.js'])
+{{--    @vite(['public/css/build/all.css'])--}}
+{{--    @vite(['public/js/build/all.js'])--}}
+    @vite('resources/assets/less/app.less')
+    @vite('resources/assets/js/snipeit.js')
     @if (($snipeSettings) && ($snipeSettings->allow_user_skin==1) && Auth::check() && Auth::user()->present()->skin != '')
         <link rel="stylesheet" href="{{ url(mix('css/dist/skins/skin-'.Auth::user()->present()->skin.'.min.css')) }}">
     @else
@@ -945,11 +948,11 @@
         </div>
 
         {{-- Javascript files --}}
-        <script src="{{ url(mix('js/dist/all.js')) }}" nonce="{{ csrf_token() }}"></script>
-        <script defer src="{{ url(mix('js/dist/all-defer.js')) }}" nonce="{{ csrf_token() }}"></script>
+{{--        <script src="{{ url(mix('js/dist/all.js')) }}" nonce="{{ csrf_token() }}"></script>--}}
+{{--        <script defer src="{{ url(mix('js/dist/all-defer.js')) }}" nonce="{{ csrf_token() }}"></script>--}}
 
         <!-- v5-beta: This pGenerator call must remain here for v5 - until fixed - so that the JS password generator works for the user create modal. -->
-        <script src="{{ url('js/pGenerator.jquery.js') }}"></script>
+{{--        <script src="{{ url('js/pGenerator.jquery.js') }}"></script>--}}
 
         {{-- Page level javascript --}}
         @stack('js')

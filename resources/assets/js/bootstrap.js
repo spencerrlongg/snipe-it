@@ -12,14 +12,15 @@ window._ = _;
  * jQuery UI is loaded here and then the tooltip is assigned another funtion name
  * This resolves the issue of jquery-ui & bootstrap tooltip conflict
  */
-import 'jquery-ui';
+require('jquery-ui');
 jQuery.fn.uitooltip = jQuery.fn.tooltip; 
 
 /**
  * Load boostrap
  */
-import 'bootstrap-less';
+require('bootstrap-less');
 
+require('admin-lte');
 /**
  * Vue is a modern JavaScript library for building interactive web interfaces
  * using reactive data binding and reusable components. Vue's API is clean
@@ -28,7 +29,7 @@ import 'bootstrap-less';
 
 window.Vue = require('vue').default;
 window.eventHub = new Vue();
-import 'vue-resource';
+require('vue-resource');
 
 /**
  * We'll register a HTTP interceptor to attach the "CSRF" header to each of
