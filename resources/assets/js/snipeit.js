@@ -1,4 +1,6 @@
-
+import ('./bootstrap');
+import('admin-lte');
+import('jquery-ui');
 
 // var jQuery = require('jquery');
 // window.jQuery = jQuery

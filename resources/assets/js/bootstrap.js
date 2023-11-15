@@ -1,4 +1,5 @@
-window._ = require('lodash');
+import _ from 'lodash';
+window._ = _;
 
 /**
  * We'll load jQuery and the Bootstrap jQuery plugin which provides support
@@ -19,6 +20,7 @@ jQuery.fn.uitooltip = jQuery.fn.tooltip;
  */
 require('bootstrap-less');
 
+require('admin-lte');
 /**
  * Vue is a modern JavaScript library for building interactive web interfaces
  * using reactive data binding and reusable components. Vue's API is clean
