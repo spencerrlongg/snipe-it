@@ -47,8 +47,6 @@ class PersonalAccessTokens extends Component
 
     public function deleteToken($tokenId): void
     {
-        //this needs safety (though the scope of auth::user might kind of do it...)
-        //seems like it does, test more
         Auth::user()->tokens()->find($tokenId)->delete();
     }
 }
