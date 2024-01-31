@@ -111,35 +111,19 @@ class AssetsController extends Controller
         $success = false;
         $serials = $request->input('serials');
 
+        $tags_and_serials = array_intersect($asset_tags, $serials);
+
         for ($a = 1; $a <= count($asset_tags); $a++) {
             $asset = new Asset();
+
+            $asset->fill($request->validated());
+
             $asset->model()->associate(AssetModel::find($request->input('model_id')));
-            $asset->name = $request->input('name');
 
             // Check for a corresponding serial
-            if (($serials) && (array_key_exists($a, $serials))) {
-                $asset->serial = $serials[$a];
-            }
+            $asset->serial = $serials[$a] ?? null;
 
-            if (($asset_tags) && (array_key_exists($a, $asset_tags))) {
-                $asset->asset_tag = $asset_tags[$a];
-            }
-
-            $asset->company_id              = Company::getIdForCurrentUser($request->input('company_id'));
-            $asset->model_id                = $request->input('model_id');
-            $asset->order_number            = $request->input('order_number');
-            $asset->notes                   = $request->input('notes');
-            $asset->user_id                 = Auth::id();
-            $asset->status_id               = request('status_id');
-            $asset->warranty_months         = request('warranty_months', null);
-            $asset->purchase_cost           = request('purchase_cost');
-            $asset->purchase_date           = request('purchase_date', null);
-            $asset->asset_eol_date          = request('asset_eol_date', null);
-            $asset->assigned_to             = request('assigned_to', null);
-            $asset->supplier_id             = request('supplier_id', null);
-            $asset->requestable             = request('requestable', 0);
-            $asset->rtd_location_id         = request('rtd_location_id', null);
-            $asset->byod                    = request('byod', 0);
+            $asset->asset_tag = $asset_tags[$a] ?? null;
 
             if (! empty($settings->audit_interval)) {
                 $asset->next_audit_date = Carbon::now()->addMonths($settings->audit_interval)->toDateString();

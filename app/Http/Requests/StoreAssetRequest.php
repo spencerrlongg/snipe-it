@@ -4,6 +4,7 @@ namespace App\Http\Requests;
 
 use App\Models\Asset;
 use App\Models\Company;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
 
 class StoreAssetRequest extends ImageUploadRequest
@@ -20,7 +21,6 @@ class StoreAssetRequest extends ImageUploadRequest
 
     public function prepareForValidation(): void
     {
-        // Handle arrays of assets_tags and serials
 
 
         // Guard against users passing in an array for company_id instead of an integer.
@@ -34,6 +34,7 @@ class StoreAssetRequest extends ImageUploadRequest
             'asset_tag' => $this->asset_tag ?? Asset::autoincrement_asset(),
             'company_id' => $idForCurrentUser,
             'assigned_to' => $assigned_to ?? null,
+            'user_id' => Auth::id(),
         ]);
     }
 

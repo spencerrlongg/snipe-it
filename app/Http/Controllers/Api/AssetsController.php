@@ -536,11 +536,9 @@ class AssetsController extends Controller
      */
     public function store(StoreAssetRequest $request): JsonResponse
     {
-        $asset = new Asset();
-        $asset->model()->associate(AssetModel::find((int) $request->get('model_id')));
+        $asset = Asset::create($request->validated());
 
-        $asset->fill($request->validated());
-        $asset->user_id    = Auth::id();
+        $model = $asset->model()->associate(AssetModel::find((int) $request->get('model_id')));
 
         /**
         * this is here just legacy reasons. Api\AssetController
@@ -553,7 +551,6 @@ class AssetsController extends Controller
         $asset = $request->handleImages($asset);
 
         // Update custom fields in the database.
-        $model = AssetModel::find($request->input('model_id'));
 
         // Check that it's an object and not a collection
         // (Sometimes people send arrays here and they shouldn't
