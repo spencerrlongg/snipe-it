@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Assets;
 use App\Helpers\Helper;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\ImageUploadRequest;
+use App\Http\Requests\StoreAssetRequest;
 use App\Models\Actionlog;
 use App\Models\Manufacturer;
 use Illuminate\Support\Facades\Log;
@@ -98,10 +99,8 @@ class AssetsController extends Controller
      * @since [v1.0]
      * @return Redirect
      */
-    public function store(ImageUploadRequest $request)
+    public function store(StoreAssetRequest $request)
     {
-        $this->authorize(Asset::class);
-
         // Handle asset tags - there could be one, or potentially many.
         // This is only necessary on create, not update, since bulk editing is handled
         // differently

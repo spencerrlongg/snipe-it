@@ -20,6 +20,9 @@ class StoreAssetRequest extends ImageUploadRequest
 
     public function prepareForValidation(): void
     {
+        // Handle arrays of assets_tags and serials
+
+
         // Guard against users passing in an array for company_id instead of an integer.
         // If the company_id is not an integer then we simply use what was
         // provided to be caught by model level validation later.
