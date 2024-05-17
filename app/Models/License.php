@@ -6,7 +6,8 @@ use App\Helpers\Helper;
 use App\Models\Traits\Searchable;
 use App\Presenters\Presentable;
 use Carbon\Carbon;
-use DB;
+use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\Auth;
@@ -154,9 +155,8 @@ class License extends Depreciable
      *
      * @author A. Gianotto <snipe@snipe.net>
      * @since [v3.0]
-     * @return \Illuminate\Database\Eloquent\Relations\Relation
      */
-    public static function adjustSeatCount($license, $oldSeats, $newSeats)
+    public static function adjustSeatCount($license, $oldSeats, $newSeats): bool
     {
         // If the seats haven't changed, continue on happily.
         if ($oldSeats == $newSeats) {
@@ -204,7 +204,7 @@ class License extends Depreciable
         }
         //Chunk and use DB transactions to prevent timeouts.
 
-        collect($licenseInsert)->chunk(1000)->each(function ($chunk) {
+        collect($licenseInsert)->chunkById(1000, function (Collection $chunk) {
             DB::transaction(function () use ($chunk) {
                 LicenseSeat::insert($chunk->toArray());
             });
