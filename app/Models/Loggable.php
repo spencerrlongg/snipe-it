@@ -26,7 +26,12 @@ trait Loggable
                         $model->logAdmin(actionType: $event, note: 'user trait');
                         break;
                     case Asset::class:
-                        $model->logCreate(event: $event, note: 'asset trait boot method');
+                        if ($event == 'created') {
+                            $model->logCreate(event: $event, note: 'asset trait boot method');
+                        }
+                        if ($event == 'updated') {
+                            $model->logUpdate();
+                        }
                         break;
                     case Accessory::class:
                         // accessory seems to not fire eloquent events???
@@ -292,19 +297,17 @@ trait Loggable
      */
     public function logCreate($event, $note = null): Actionlog
     {
-        if ($event == 'created') {
-            $event = 'create';
-        }
-        if ($event == 'updated') {
-            $event = 'update';
-        }
-        if ($event == 'deleted') {
-            $event = 'delete';
-        }
-        if ($event == 'restored') {
-            $event = 'restore';
-        }
+        //if ($event == 'created') {
+        //    $event = 'create';
+        //}
+        //if ($event == 'deleted') {
+        //    $event = 'delete';
+        //}
+        //if ($event == 'restored') {
+        //    $event = 'restore';
+        //}
         $user_id = -1;
+        //{"name":{"old":"Test api Asset checkbox","new":"poop"}}
         if (Auth::user()) {
             $user_id = Auth::user()->id;
         }
@@ -327,6 +330,61 @@ trait Loggable
 
 
         return $log;
+    }
+
+    public function logUpdate(): Actionlog|bool
+    {
+        $attributes = self::getAttributes();
+        $attributesOriginal = self::getRawOriginal();
+        $same_checkout_counter = false;
+        $same_checkin_counter = false;
+        $restoring_or_deleting = false;
+
+
+        // This is a gross hack to prevent the double logging when restoring an asset
+        if (array_key_exists('deleted_at', $attributes) && array_key_exists('deleted_at', $attributesOriginal)) {
+            $restoring_or_deleting = (($attributes['deleted_at'] != $attributesOriginal['deleted_at']));
+        }
+
+        if (array_key_exists('checkout_counter', $attributes) && array_key_exists('checkout_counter', $attributesOriginal)) {
+            $same_checkout_counter = (($attributes['checkout_counter'] == $attributesOriginal['checkout_counter']));
+        }
+
+        if (array_key_exists('checkin_counter', $attributes) && array_key_exists('checkin_counter', $attributesOriginal)) {
+            $same_checkin_counter = (($attributes['checkin_counter'] == $attributesOriginal['checkin_counter']));
+        }
+
+        // If the asset isn't being checked out or audited, log the update.
+        // (Those other actions already create log entries.)
+        if (($attributes['assigned_to'] == $attributesOriginal['assigned_to'])
+            && ($same_checkout_counter) && ($same_checkin_counter)
+            && ((isset($attributes['next_audit_date']) ? $attributes['next_audit_date'] : null) == (isset($attributesOriginal['next_audit_date']) ? $attributesOriginal['next_audit_date'] : null))
+            && ($attributes['last_checkout'] == $attributesOriginal['last_checkout']) && (!$restoring_or_deleting)) {
+            $changed = [];
+
+            foreach (self::getRawOriginal() as $key => $value) {
+                if (self::getRawOriginal()[$key] != self::getAttributes()[$key]) {
+                    $changed[$key]['old'] = self::getRawOriginal()[$key];
+                    $changed[$key]['new'] = self::getAttributes()[$key];
+                }
+            }
+
+            unset($changed['updated_at']);
+
+
+            if (empty($changed)) {
+                return false;
+            }
+
+            $logAction = new Actionlog();
+            $logAction->item_type = self::class;
+            $logAction->item_id = self::getAttributes()['id'];
+            $logAction->created_at = date('Y-m-d H:i:s');
+            $logAction->user_id = Auth::id();
+            $logAction->log_meta = json_encode($changed);
+            $logAction->logaction('update');
+        }
+        return $logAction;
     }
 
     /**

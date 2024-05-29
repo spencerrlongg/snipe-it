@@ -50,4 +50,30 @@ class AssetsTest extends TestCase
         $this->assertNotNull($log);
         $this->assertEquals('create', $log->action_type);
     }
+
+    public function testActionLogICreatedAtApiAssetUpdate()
+    {
+        $user = User::factory()->editAssets()->create();
+        $asset = Asset::factory()->create([
+            'name' => 'Test Asset',
+        ]);
+
+        $this->actingAsForApi($user)->patchJson(route('api.assets.update', $asset->id), [
+            'name' => 'Test Update Asset',
+        ])->assertOk()->assertStatusMessageIs('success');
+
+        $asset->refresh();
+
+        $log = $asset->assetlog()->where('action_type', 'update')->sole();
+
+        $this->assertJsonStringEqualsJsonString(json_encode([
+            'name' => [
+                'old' => 'Test Asset',
+                'new' => 'Test Update Asset',
+            ]
+        ]), $log->log_meta);
+
+        $this->assertEquals('update', $log->action_type);
+
+    }
 }
