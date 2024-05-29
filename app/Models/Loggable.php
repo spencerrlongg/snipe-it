@@ -376,15 +376,17 @@ trait Loggable
                 return false;
             }
 
-            $logAction = new Actionlog();
-            $logAction->item_type = self::class;
-            $logAction->item_id = self::getAttributes()['id'];
-            $logAction->created_at = date('Y-m-d H:i:s');
-            $logAction->user_id = Auth::id();
-            $logAction->log_meta = json_encode($changed);
-            $logAction->logaction('update');
+            $log = new Actionlog();
+            $log->item_type = self::class;
+            $log->item_id = self::getAttributes()['id'];
+            $log->created_at = date('Y-m-d H:i:s');
+            $log->user_id = Auth::id();
+            $log->log_meta = json_encode($changed);
+            $log->logaction('update');
+
+            return $log;
         }
-        return $logAction;
+        return false;
     }
 
     /**
