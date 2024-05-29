@@ -295,6 +295,15 @@ trait Loggable
         if ($event == 'created') {
             $event = 'create';
         }
+        if ($event == 'updated') {
+            $event = 'update';
+        }
+        if ($event == 'deleted') {
+            $event = 'delete';
+        }
+        if ($event == 'restored') {
+            $event = 'restore';
+        }
         $user_id = -1;
         if (Auth::user()) {
             $user_id = Auth::user()->id;

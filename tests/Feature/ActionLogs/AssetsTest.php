@@ -25,32 +25,29 @@ class AssetsTest extends TestCase
         ])->assertOk()->assertStatusMessageIs('success')->json();
 
         $asset = Asset::find($response['payload']['id']);
-
         $log = $asset->assetlog()->sole();
 
         $this->assertNotNull($log);
-
         $this->assertEquals('create', $log->action_type);
     }
 
     public function testActionLogIsCreatedAtGuiAssetStore()
     {
-        $this->markTestIncomplete('not finished');
-
         $user = User::factory()->createAssets()->create();
         $model = AssetModel::factory()->create();
         $status = Statuslabel::factory()->create();
 
-        $this->settings->enableAutoIncrement();
-
-        $response = $this->actingAs($user)->postJson(route('assets.store'), [
+        $this->actingAs($user)->postJson(route('hardware.store'), [
+            'name'       => 'Test Asset',
+            'asset_tags' => [1 => '1'],
             'model_id'  => $model->id,
             'status_id' => $status->id,
-        ])->assertOk()->assertStatusMessageIs('success')->json();
+        ])->assertRedirect();
 
-        $asset = Asset::find($response['payload']['id']);
-        $log = Actionlog::where('item_id', $asset->id)->where('item_type', 'App\Models\Asset')->first();
+        $asset = Asset::where('name', 'Test Asset')->first();
+        $log = $asset->assetlog()->sole();
 
+        $this->assertNotNull($log);
         $this->assertEquals('create', $log->action_type);
     }
 }

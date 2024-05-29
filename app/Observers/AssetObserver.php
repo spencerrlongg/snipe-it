@@ -103,16 +103,6 @@ class AssetObserver
                 $settings->save();
             }
         }
-
-        //$logAction = new Actionlog();
-        //$logAction->item_type = Asset::class; // can we instead say $logAction->item = $asset ?
-        //$logAction->item_id = $asset->id;
-        //$logAction->created_at = date('Y-m-d H:i:s');
-        //$logAction->user_id = Auth::id();
-        //if($asset->imported) {
-        //    $logAction->setActionSource('importer');
-        //}
-        //$logAction->logaction('create');
     }
 
     /**

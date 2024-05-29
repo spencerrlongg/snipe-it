@@ -100,6 +100,7 @@ class AssetsController extends Controller
      */
     public function store(ImageUploadRequest $request)
     {
+        //dd($request->all());
         $this->authorize(Asset::class);
 
         // There are a lot more rules to add here but prevents

@@ -34,6 +34,7 @@ class Asset extends Depreciable
     use HasFactory, Loggable, Requestable, Presentable, SoftDeletes, ValidatingTrait, UniqueUndeletedTrait;
 
     // loggable options
+    //protected static array $recordEvents = ['deleted'];
 
 
     public const LOCATION = 'location';
