@@ -2,8 +2,8 @@
 
 namespace App\Models;
 
-use App\Models\Setting;
 use App\Notifications\AuditNotification;
+use Exception;
 use Illuminate\Support\Facades\Auth;
 
 trait Loggable
@@ -14,9 +14,8 @@ trait Loggable
     /**
      * @author  Daniel Meltzer <dmeltzer.devel@gmail.com>
      * @since [v3.4]
-     * @return \App\Models\Actionlog
      */
-    public function log()
+    public function log(): Actionlog
     {
         return $this->morphMany(Actionlog::class, 'item');
     }
@@ -29,9 +28,8 @@ trait Loggable
     /**
      * @author  Daniel Meltzer <dmeltzer.devel@gmail.com>
      * @since [v3.4]
-     * @return \App\Models\Actionlog
      */
-    public function logCheckout($note, $target, $action_date = null, $originalValues = [])
+    public function logCheckout($note, $target, $action_date = null, $originalValues = []): Actionlog|bool
     {
         $log = new Actionlog;
         $log = $this->determineLogItemType($log);
@@ -40,15 +38,11 @@ trait Loggable
         }
 
         if (! isset($target)) {
-            throw new \Exception('All checkout logs require a target.');
-
-            return;
+            throw new Exception('All checkout logs require a target.');
         }
 
         if (! isset($target->id)) {
-            throw new \Exception('That target seems invalid (no target ID available).');
-
-            return;
+            throw new Exception('That target seems invalid (no target ID available).');
         }
 
         $log->target_type = get_class($target);
@@ -112,9 +106,8 @@ trait Loggable
     /**
      * @author  Daniel Meltzer <dmeltzer.devel@gmail.com>
      * @since [v3.4]
-     * @return \App\Models\Actionlog
      */
-    public function logCheckin($target, $note, $action_date = null, $originalValues = [])
+    public function logCheckin($target, $note, $action_date = null, $originalValues = []): Actionlog
     {
         $settings = Setting::getSettings();
         $log = new Actionlog;
@@ -134,7 +127,7 @@ trait Loggable
 
             if (static::class == Asset::class) {
                 if ($asset = Asset::find($log->item_id)) {
-                    $asset->increment('checkin_counter', 1);
+                    $asset->increment('checkin_counter');
                 }
             }
         }
@@ -209,9 +202,8 @@ trait Loggable
     /**
      * @author  A. Gianotto <snipe@snipe.net>
      * @since [v4.0]
-     * @return \App\Models\Actionlog
      */
-    public function logAudit($note, $location_id, $filename = null)
+    public function logAudit($note, $location_id, $filename = null): Actionlog
     {
         $log = new Actionlog;
         $location = Location::find($location_id);
@@ -222,7 +214,7 @@ trait Loggable
             $log->item_type = static::class;
             $log->item_id = $this->id;
         }
-        $log->location_id = ($location_id) ? $location_id : null;
+        $log->location_id = ($location_id) ?: null;
         $log->note = $note;
         $log->user_id = Auth::user()->id;
         $log->filename = $filename;
@@ -243,9 +235,8 @@ trait Loggable
     /**
      * @author  Daniel Meltzer <dmeltzer.devel@gmail.com>
      * @since [v3.5]
-     * @return \App\Models\Actionlog
      */
-    public function logCreate($note = null)
+    public function logCreate($note = null): Actionlog
     {
         $user_id = -1;
         if (Auth::user()) {
@@ -271,9 +262,8 @@ trait Loggable
     /**
      * @author  Daniel Meltzer <dmeltzer.devel@gmail.com>
      * @since [v3.4]
-     * @return \App\Models\Actionlog
      */
-    public function logUpload($filename, $note)
+    public function logUpload($filename, $note): Actionlog
     {
         $log = new Actionlog;
         if (static::class == LicenseSeat::class) {
