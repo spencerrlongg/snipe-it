@@ -297,9 +297,9 @@ trait Loggable
      */
     public function logCreate($event, $note = null): Actionlog
     {
-        //if ($event == 'created') {
-        //    $event = 'create';
-        //}
+        if ($event == 'created') {
+            $event = 'create';
+        }
         //if ($event == 'deleted') {
         //    $event = 'delete';
         //}
