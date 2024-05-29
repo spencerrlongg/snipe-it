@@ -25,7 +25,10 @@ class AssetsTest extends TestCase
         ])->assertOk()->assertStatusMessageIs('success')->json();
 
         $asset = Asset::find($response['payload']['id']);
-        $log = Actionlog::where('item_id', $asset->id)->where('item_type', 'App\Models\Asset')->first();
+
+        $log = $asset->assetlog()->sole();
+
+        $this->assertNotNull($log);
 
         $this->assertEquals('create', $log->action_type);
     }

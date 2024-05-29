@@ -33,6 +33,9 @@ class Asset extends Depreciable
     use CompanyableTrait;
     use HasFactory, Loggable, Requestable, Presentable, SoftDeletes, ValidatingTrait, UniqueUndeletedTrait;
 
+    // loggable options
+
+
     public const LOCATION = 'location';
     public const ASSET = 'asset';
     public const USER = 'user';

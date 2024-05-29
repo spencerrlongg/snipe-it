@@ -4,12 +4,66 @@ namespace App\Models;
 
 use App\Notifications\AuditNotification;
 use Exception;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
 
 trait Loggable
 {
     // an attribute for setting whether or not the item was imported
     public ?bool $imported = false;
+
+    public static function bootLoggable()
+    {
+        //loops through the events to be recorded (defined in the model)
+        //and then calls the proper method for each model
+        static::eventsToBeRecorded()->each(function ($event) {
+            static::$event(function ($model) use ($event) {
+                switch (static::class) {
+                    case Setting::class:
+                        $model->logAdmin(actionType: $event, note: 'settings trait');
+                        break;
+                    case User::class:
+                        $model->logAdmin(actionType: $event, note: 'user trait');
+                        break;
+                    case Asset::class:
+                        $model->logCreate(event: $event, note: 'asset trait boot method');
+                        break;
+                    case Accessory::class:
+                        // accessory seems to not fire eloquent events???
+                        $model->logCreate(event: $event, note: 'accessory trait boot method');
+                        break;
+                    case License::class:
+                        $model->logCreate(event: $event, note: 'license trait boot method');
+                        break;
+                    // should be able to listen for the checkin and checkout events here as well
+                    // as long as they're manually declared in the model $recordEvents property
+                    // etc...
+                    default:
+                        //do nothing for now
+                        break;
+                }
+            });
+        });
+    }
+
+    protected static function eventsToBeRecorded(): Collection
+    {
+        if (isset(static::$recordEvents)) {
+            return collect(static::$recordEvents);
+        }
+
+        $events = collect([
+            'created',
+            'updated',
+            'deleted',
+        ]);
+
+        if (collect(class_uses_recursive(static::class))->contains(SoftDeletes::class)) {
+            $events->push('restored');
+        }
+
+        return $events;
+    }
 
     /**
      * @author  Daniel Meltzer <dmeltzer.devel@gmail.com>
@@ -236,8 +290,11 @@ trait Loggable
      * @author  Daniel Meltzer <dmeltzer.devel@gmail.com>
      * @since [v3.5]
      */
-    public function logCreate($note = null): Actionlog
+    public function logCreate($event, $note = null): Actionlog
     {
+        if ($event == 'created') {
+            $event = 'create';
+        }
         $user_id = -1;
         if (Auth::user()) {
             $user_id = Auth::user()->id;
@@ -253,8 +310,12 @@ trait Loggable
         $log->location_id = null;
         $log->note = $note;
         $log->user_id = $user_id;
-        $log->logaction('create');
+        $log->logaction($event);
+        if ($this->imported) {
+            $this->setActionSource('importer');
+        }
         $log->save();
+
 
         return $log;
     }
@@ -281,5 +342,46 @@ trait Loggable
         $log->logaction('uploaded');
 
         return $log;
+    }
+
+
+    public function logAdmin($actionType = null, $note = null, $providedValue = null)
+    {
+        if ($this->isDirty()) {
+            $changed = [];
+            $new = $this->getDirty();
+            $old = $this->getRawOriginal();
+            if ($this->isDirty('password')) {
+                $changed['new']['password'] = '********';
+                $changed['old']['password'] = '********';
+            } else {
+                foreach ($new as $key => $value) {
+                    if (array_key_exists($key, $old) && is_null($providedValue)) {
+                        $changed['new'][$key] = $new[$key];
+                        $changed['old'][$key] = $old[$key];
+                    } else {
+                        $changed = $providedValue;
+                    }
+                }
+            }
+            if (is_null($providedValue)) {
+                unset($changed['new']['updated_at'], $changed['old']['updated_at']);
+            }
+
+            $user = Auth::user();
+
+            $log = new Adminlog();
+            $log->user_id = $user->id ?? 1;
+            $log->action_type = $actionType ? $actionType : null;
+            $log->item_type = static::class;
+            $log->item_id = $this->id;
+            $log->note = $note ? $note : null;
+            $log->log_meta = json_encode($changed);
+
+            $log->save();
+            return $log;
+        } else {
+            return;
+        }
     }
 }
