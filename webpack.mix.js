@@ -54,6 +54,9 @@ mix
     ],
     "./public/js/build/app.js" //because of compiling - this does not work very well :(
   )
+    .postCss("resources/css/tailwind.css", "public/css", [
+        require("tailwindcss")
+    ]);
 
 // Convert the skins to CSS
 mix.less(
