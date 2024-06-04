@@ -54,8 +54,7 @@
             @else
                 <x-tailwind.button>Checkout Asset</x-tailwind.button>
             @endif
-            <x-tailwind.button
-                    class="bg-transparent text-buttonblue border-2 border-buttonblue hover:ring-2 hover:ring-buttonblue">
+            <x-tailwind.button>
                 Edit Asset
             </x-tailwind.button>
             <x-tailwind.button>Clone Asset</x-tailwind.button>
