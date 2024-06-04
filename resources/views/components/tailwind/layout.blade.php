@@ -2,7 +2,8 @@
 <head>
     <title>{{ $title ?? 'Snipe IT' }}</title>
     <link href="{{ asset('css/tailwind.css') }}" rel="stylesheet">
-    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    {{--    <link rel="stylesheet" href="{{ url(mix('css/dist/all.css')) }}">--}}
+    @livewireStyles
 </head>
 
 
@@ -11,7 +12,7 @@
         <!-- Logo -->
         <div class="flex items-center justify-between md:w-auto w-full mr-auto">
 
-            <a href={{ env('APP_URL') }} class="py-3 px-2 text-white flex font-extralight text-2xl items-center">
+            <a class="py-3 px-2 text-white flex font-extralight text-2xl items-center" href={{ env('APP_URL') }}>
             <img alt="logo" class="mr-2 h-8" src={{ asset('img/demo/snipe-logo.png') }}>
             Snipe-IT TW
             </a>
@@ -54,4 +55,9 @@
 <div class="pl-2 bg-gray-50">
     {{ $slot }}
 </div>
+{{-- Javascript files --}}
+{{--<script src="{{ url(mix('js/dist/all.js')) }}" nonce="{{ csrf_token() }}"></script>--}}
+
+{{--@stack('js')--}}
+@livewireScripts
 </body>
