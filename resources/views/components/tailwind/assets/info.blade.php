@@ -20,7 +20,7 @@
             <dt class="font-bold bg-gray-200 pl-2">Status</dt>
             <dd class="bg-gray-200 flex items-center">
                 @if($asset->assetstatus->deployable)
-                    <x-tailwind.check-icon-filled/>
+                    <x-tailwind.icons.check-icon-filled/>
                 @else
                     yellow
                 @endif
@@ -37,10 +37,10 @@
             <dt class="font-bold pl-2">BYOD</dt>
             <dd class="flex items-center">
                 @if($asset->byod)
-                    <x-tailwind.check-icon/>
+                    <x-tailwind.icons.check-icon/>
                     Yes
                 @else
-                    <x-tailwind.x-icon/>
+                    <x-tailwind.icons.x-icon/>
                     No
                 @endif
             </dd>
@@ -54,7 +54,10 @@
             @else
                 <x-tailwind.button>Checkout Asset</x-tailwind.button>
             @endif
-            <x-tailwind.button>Edit Asset</x-tailwind.button>
+            <x-tailwind.button
+                    class="bg-transparent text-buttonblue border-2 border-buttonblue hover:ring-2 hover:ring-buttonblue">
+                Edit Asset
+            </x-tailwind.button>
             <x-tailwind.button>Clone Asset</x-tailwind.button>
             <x-tailwind.button>Audit Asset</x-tailwind.button>
             <x-tailwind.button class="mt-6 bg-deletered">Delete Asset</x-tailwind.button>
