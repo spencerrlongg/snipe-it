@@ -56,8 +56,8 @@
     {{ $slot }}
 </div>
 {{-- Javascript files --}}
-{{--<script src="{{ url(mix('js/dist/all.js')) }}" nonce="{{ csrf_token() }}"></script>--}}
+<script src="{{ url(mix('js/dist/all.js')) }}" nonce="{{ csrf_token() }}"></script>
 
-{{--@stack('js')--}}
+@stack('js')
 @livewireScripts
 </body>
