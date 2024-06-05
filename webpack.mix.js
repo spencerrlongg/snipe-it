@@ -192,13 +192,6 @@ mix
   )
   .version();
 
-mix
-  .combine(
-    ['./node_modules/alpinejs/dist/cdn.js'],
-    './public/js/dist/all-defer.js'
-  )
-  .version();
-
 /**
  * Copy, minify and version skins
  */

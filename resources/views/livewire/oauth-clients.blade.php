@@ -14,7 +14,7 @@
                 @endif
 
                 <a class="button button-small"
-                   wire:click="$emit('openModal')"
+                   wire:click="$dispatch('openModal')"
                    onclick="$('#modal-create-client').modal('show');"
                 >
                     Create New Client
@@ -173,7 +173,7 @@
                                        type="text"
                                        aria-label="create-client-name"
                                        class="form-control"
-                                       wire:model="name"
+                                       wire:model.live="name"
                                        wire:keydown.enter="createClient"
                                        autofocus
                                 >
@@ -193,7 +193,7 @@
                                        class="form-control"
                                        aria-label="redirect"
                                        name="redirect"
-                                       wire:model="redirect"
+                                       wire:model.live="redirect"
                                        wire:keydown.enter="createClient"
                                 >
 
@@ -263,7 +263,7 @@
                                         type="text"
                                         aria-label="edit-client-name"
                                         class="form-control"
-                                        wire:model="editName"
+                                        wire:model.live="editName"
                                         wire:keydown.enter="updateClient('{{ $editClientId }}')"
                                 >
 
@@ -283,7 +283,7 @@
                                         class="form-control"
                                         name="redirect"
                                         aria-label="redirect"
-                                        wire:model="editRedirect"
+                                        wire:model.live="editRedirect"
                                         wire:keydown.enter="updateClient('{{ $editClientId }}')"
                                 >
 
@@ -311,7 +311,7 @@
     </div>
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            window.livewire.on('openModal', () => {
+            Livewire.on('openModal', () => {
                 $('#modal-create-client').modal('show').on('shown.bs.modal', function() {
                     $(this).find('[autofocus]').focus();
                 });
