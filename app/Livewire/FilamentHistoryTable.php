@@ -2,6 +2,7 @@
 
 namespace App\Livewire;
 
+use App\Models\Actionlog;
 use App\Tables\Columns\LinkColumn;
 use Filament\Forms\Concerns\InteractsWithForms;
 use Filament\Forms\Contracts\HasForms;
@@ -32,11 +33,14 @@ class FilamentHistoryTable extends Component implements HasForms, HasTable
             ->columns([
                 TextColumn::make('id')->sortable()->toggleable()->copyable()->copyMessage('ID copied')->copyMessageDuration(1500),
                 TextColumn::make('created_at')->numeric()->dateTime('Y-m-d H:i:s')->sortable()->searchable()->toggleable(),
-                TextColumn::make('admin.first_name')->sortable()->searchable()->sortable()->toggleable(),
+                TextColumn::make('admin.first_name')->exists('admin')->sortable()->searchable()->sortable()->toggleable(),
                 TextColumn::make('action_type')->sortable()->searchable()->toggleable(),
-                //TextColumn::make('item.asset_model')
+                TextColumn::make('item')
+                    ->getStateUsing(fn($record) => $record->item->model->name.' | ('.$record->item->asset_tag.')')
+                    ->url(fn($record) => route('hardware.show', $record->item->id)),
                 TextColumn::make('log_meta')->sortable()->searchable()->sortable()->toggleable(),
                 TextColumn::make('user.first_name')->exists('user')->label('Target')->sortable()->searchable()->toggleable()
+                //i'd like to ->url(route('user.id', $user->id)), or something.
                 //->url($id = fn(Builder $query) => $query->whereRelation('user', 'user_id', $this->asset->)), hmmmmmmm
             ])
             ->striped()
