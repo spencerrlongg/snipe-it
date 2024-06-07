@@ -1,8 +1,14 @@
 /** @type {import('tailwindcss').Config} */
+import preset from './vendor/filament/support/tailwind.config.preset'
+
 module.exports = {
+    presets: [preset],
     content: [
         "./resources/views/components/tailwind/**/*.blade.php",
         "./resources/**/*.blade.php",
+        './app/Filament/**/*.php',
+        './resources/views/filament/**/*.blade.php',
+        './vendor/filament/**/*.blade.php',
     ],
     theme: {
         extend: {},
@@ -12,7 +18,7 @@ module.exports = {
             white: '#ffffff',
             gray: {
                 50: '#f9f9f9',
-                200: '#d1d5db'
+                100: '#d1d5db'
             },
             buttonblue: '#307095',
             deletered: '#dd4b39',

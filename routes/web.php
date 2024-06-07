@@ -23,6 +23,7 @@ use App\Http\Controllers\ViewAssetsController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\ForgotPasswordController;
 use App\Http\Controllers\Auth\ResetPasswordController;
+use App\Livewire\FilamentHistoryTable;
 use App\Livewire\Importer;
 use App\Models\Asset;
 use Illuminate\Support\Facades\Route;
@@ -34,6 +35,7 @@ Route::group(['middleware' => 'auth'], function () {
             'asset' => Asset::find(1),
         ]);
     });
+    Route::get('/filament-demo', FilamentHistoryTable::class);
     /*
     * Companies
     */

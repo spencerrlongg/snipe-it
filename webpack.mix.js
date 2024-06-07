@@ -55,8 +55,10 @@ mix
     "./public/js/build/app.js" //because of compiling - this does not work very well :(
   )
     .postCss("resources/css/tailwind.css", "public/css", [
-        require("tailwindcss")
-    ]);
+        require('tailwindcss/nesting', 'postcss-nesting'),
+        require("tailwindcss"),
+        require('autoprefixer')
+    ])
 
 // Convert the skins to CSS
 mix.less(

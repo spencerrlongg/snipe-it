@@ -1,9 +1,18 @@
 <body class="bg-gray-50">
 <head>
     <title>{{ $title ?? 'Snipe IT' }}</title>
+    @filamentStyles
     <link href="{{ asset('css/tailwind.css') }}" rel="stylesheet">
     {{--    <link rel="stylesheet" href="{{ url(mix('css/dist/all.css')) }}">--}}
     @livewireStyles
+
+    <style>
+        [x-cloak] {
+            display: none !important;
+        }
+    </style>
+
+
 </head>
 
 
@@ -59,5 +68,6 @@
 <script src="{{ url(mix('js/dist/all.js')) }}" nonce="{{ csrf_token() }}"></script>
 
 @stack('js')
+@filamentScripts
 @livewireScripts
 </body>
