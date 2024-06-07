@@ -1,7 +1,7 @@
 @props(['asset' => $asset])
 <div>
-    <h1 class="text-2xl m-4">View Asset {{ $asset->asset_tag }}</h1>
-    <div class="ml-4 grid grid-cols-1 md:grid-cols-2 md:gap-2">
+
+<div class="ml-4 grid grid-cols-1 md:grid-cols-2 md:gap-2">
         {{--        hmm, not sure the best way to componentize this... //shrug will ask marcus--}}
         {{--        <x-tailwind.datalist>--}}
         {{--            <x-slot name="label">--}}

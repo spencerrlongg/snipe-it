@@ -2,6 +2,7 @@
 
 namespace App\Livewire;
 
+use App\Tables\Columns\LinkColumn;
 use Filament\Forms\Concerns\InteractsWithForms;
 use Filament\Forms\Contracts\HasForms;
 use Filament\Tables\Columns\TextColumn;
@@ -29,13 +30,14 @@ class FilamentHistoryTable extends Component implements HasForms, HasTable
         return $table
             ->relationship(fn(): HasMany => $this->asset->assetlog())
             ->columns([
-                TextColumn::make('id')->sortable()->toggleable(),
+                TextColumn::make('id')->sortable()->toggleable()->copyable()->copyMessage('ID copied')->copyMessageDuration(1500),
                 TextColumn::make('created_at')->numeric()->dateTime('Y-m-d H:i:s')->sortable()->searchable()->toggleable(),
                 TextColumn::make('admin.first_name')->sortable()->searchable()->sortable()->toggleable(),
                 TextColumn::make('action_type')->sortable()->searchable()->toggleable(),
                 //TextColumn::make('item.asset_model')
                 TextColumn::make('log_meta')->sortable()->searchable()->sortable()->toggleable(),
-                TextColumn::make('user.first_name')->exists('user')->label('Target')->sortable()->searchable()->toggleable(),
+                TextColumn::make('user.first_name')->exists('user')->label('Target')->sortable()->searchable()->toggleable()
+                //->url($id = fn(Builder $query) => $query->whereRelation('user', 'user_id', $this->asset->)), hmmmmmmm
             ])
             ->striped()
             ->filters([
