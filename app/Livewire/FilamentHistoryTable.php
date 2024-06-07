@@ -28,12 +28,16 @@ class FilamentHistoryTable extends Component implements HasForms, HasTable
     {
         return $table
             ->relationship(fn(): HasMany => $this->asset->assetlog())
-            ->inverseRelationship('categories')
             ->columns([
                 TextColumn::make('id')->sortable()->toggleable(),
-                TextColumn::make('action_type')->sortable()->searchable()->toggleable(),
                 TextColumn::make('created_at')->numeric()->dateTime('Y-m-d H:i:s')->sortable()->searchable()->toggleable(),
+                TextColumn::make('admin.first_name')->sortable()->searchable()->sortable()->toggleable(),
+                TextColumn::make('action_type')->sortable()->searchable()->toggleable(),
+                //TextColumn::make('item.asset_model')
+                TextColumn::make('log_meta')->sortable()->searchable()->sortable()->toggleable(),
+                TextColumn::make('user.first_name')->exists('user')->label('Target')->sortable()->searchable()->toggleable(),
             ])
+            ->striped()
             ->filters([
                 //
             ]);

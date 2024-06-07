@@ -22,6 +22,7 @@
                 @if($asset->assetstatus->deployable)
                     <x-tailwind.icons.check-icon-filled/>
                 @else
+                    {{--                    <x-tailwind.icons.check-icon-filled class="text-yellow"--}}
                     yellow
                 @endif
                 {{ $asset->assetstatus->name }}

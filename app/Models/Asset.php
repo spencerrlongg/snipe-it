@@ -634,7 +634,8 @@ class Asset extends Depreciable
     {
         return $this->hasMany(\App\Models\Actionlog::class, 'item_id')
                   ->where('item_type', '=', self::class)
-                  ->orderBy('created_at', 'desc')
+            //commented for filament sorting
+            //->orderBy('created_at', 'desc')
                   ->withTrashed();
     }
 

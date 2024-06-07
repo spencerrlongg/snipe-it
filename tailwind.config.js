@@ -23,7 +23,7 @@ module.exports = {
             buttonblue: '#307095',
             deletered: '#dd4b39',
             green: '#00a65a',
-            black: '#000000'
+            black: '#000000',
         }
     },
     plugins: [],
