@@ -9,6 +9,7 @@ use Filament\Forms\Contracts\HasForms;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Concerns\InteractsWithTable;
 use Filament\Tables\Contracts\HasTable;
+use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Table;
 use Illuminate\Contracts\Pagination\CursorPaginator;
 use Illuminate\Contracts\Pagination\Paginator;
@@ -31,7 +32,7 @@ class FilamentHistoryTable extends Component implements HasForms, HasTable
         return $table
             ->relationship(fn(): HasMany => $this->asset->assetlog()->with(['admin', 'item.model', 'user', 'item']))
             ->columns([
-                TextColumn::make('created_at')->numeric()->dateTime('Y-m-d H:i:s')->sortable()->searchable()->toggleable(),
+                TextColumn::make('created_at')->numeric()->dateTime('Y-m-d h:i:s a')->sortable()->searchable()->toggleable(),
                 TextColumn::make('admin.first_name')->exists('admin')
                     ->getStateUsing(fn($record) => $record->admin->first_name.' '.$record->admin->last_name)
                     ->url(fn($record) => route('users.show', $record->admin->id))
@@ -48,7 +49,12 @@ class FilamentHistoryTable extends Component implements HasForms, HasTable
             ->striped()
             ->selectable()
             ->filters([
-                //
+                SelectFilter::make('action_type')
+                    ->options([
+                        'checkout'      => 'Checkout',
+                        'checkin from ' => 'Checkin',
+                        'update'        => 'Update',
+                    ])
             ]);
         //return $table
         //    ->query($this->asset->actionlog)

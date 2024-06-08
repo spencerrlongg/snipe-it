@@ -31,8 +31,8 @@ class FilamentLicenseTable extends Component implements HasForms, HasTable
             ])->actions([
                 Action::make('checkin')
                     ->url(fn($record): string => route('licenses.checkin', $record->id))
+                    ->button()
             ])->striped();
-
     }
 
     public function render()
