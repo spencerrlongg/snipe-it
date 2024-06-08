@@ -5,6 +5,7 @@ namespace App\Livewire;
 use App\Models\Asset;
 use Filament\Forms\Concerns\InteractsWithForms;
 use Filament\Forms\Contracts\HasForms;
+use Filament\Tables\Actions\Action;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Concerns\InteractsWithTable;
 use Filament\Tables\Contracts\HasTable;
@@ -25,8 +26,12 @@ class FilamentLicenseTable extends Component implements HasForms, HasTable
             ->relationship(fn(): BelongsToMany => $this->asset->licenses())
             ->columns([
                 TextColumn::make('name'),
-                TextColumn::make('Product Key'),
-            ]);
+                TextColumn::make('serial')->label('Product Key'),
+                TextColumn::make('expiration_date')->getStateUsing(fn($record) => $record->expiration_date->format('Y-m-d')),
+            ])->actions([
+                Action::make('checkin')
+                    ->url(fn($record): string => route('licenses.checkin', $record->id))
+            ])->striped();
 
     }
 

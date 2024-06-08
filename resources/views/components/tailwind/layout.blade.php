@@ -61,7 +61,7 @@
         </div>
     </div>
 </nav>
-<div class="pl-2 bg-gray-50">
+<div class="pl-2 bg-gray-50 isolate">
     {{ $slot }}
 </div>
 {{-- Javascript files --}}

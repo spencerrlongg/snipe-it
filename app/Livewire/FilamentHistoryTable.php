@@ -29,21 +29,24 @@ class FilamentHistoryTable extends Component implements HasForms, HasTable
     public function table(Table $table, $asset = null): Table
     {
         return $table
-            ->relationship(fn(): HasMany => $this->asset->assetlog())
+            ->relationship(fn(): HasMany => $this->asset->assetlog()->with(['admin', 'item.model', 'user', 'item']))
             ->columns([
-                TextColumn::make('id')->sortable()->toggleable()->copyable()->copyMessage('ID copied')->copyMessageDuration(1500),
                 TextColumn::make('created_at')->numeric()->dateTime('Y-m-d H:i:s')->sortable()->searchable()->toggleable(),
-                TextColumn::make('admin.first_name')->exists('admin')->sortable()->searchable()->sortable()->toggleable(),
+                TextColumn::make('admin.first_name')->exists('admin')
+                    ->getStateUsing(fn($record) => $record->admin->first_name.' '.$record->admin->last_name)
+                    ->url(fn($record) => route('users.show', $record->admin->id))
+                    ->sortable()->searchable()->toggleable(),
                 TextColumn::make('action_type')->sortable()->searchable()->toggleable(),
                 TextColumn::make('item')
                     ->getStateUsing(fn($record) => $record->item->model->name.' | ('.$record->item->asset_tag.')')
-                    ->url(fn($record) => route('hardware.show', $record->item->id)),
-                TextColumn::make('log_meta')->sortable()->searchable()->sortable()->toggleable(),
-                TextColumn::make('user.first_name')->exists('user')->label('Target')->sortable()->searchable()->toggleable()
-                //i'd like to ->url(route('user.id', $user->id)), or something.
-                //->url($id = fn(Builder $query) => $query->whereRelation('user', 'user_id', $this->asset->)), hmmmmmmm
+                    ->url(fn($record) => route('hardware.show', $record->item->id))
+                    ->sortable()->searchable()->toggleable(),
+                //TextColumn::make('log_meta')->sortable()->searchable()->sortable()->toggleable(),
+                TextColumn::make('user.first_name')->exists('user')->label('Target')
+                    ->sortable()->searchable()->toggleable()
             ])
             ->striped()
+            ->selectable()
             ->filters([
                 //
             ]);
