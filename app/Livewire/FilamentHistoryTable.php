@@ -2,8 +2,6 @@
 
 namespace App\Livewire;
 
-use App\Models\Actionlog;
-use App\Tables\Columns\LinkColumn;
 use Filament\Forms\Concerns\InteractsWithForms;
 use Filament\Forms\Contracts\HasForms;
 use Filament\Tables\Columns\TextColumn;
@@ -11,13 +9,9 @@ use Filament\Tables\Concerns\InteractsWithTable;
 use Filament\Tables\Contracts\HasTable;
 use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Table;
-use Illuminate\Contracts\Pagination\CursorPaginator;
-use Illuminate\Contracts\Pagination\Paginator;
-use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Livewire\Component;
 use App\Models\Asset;
-use Livewire\WithPagination;
 
 
 class FilamentHistoryTable extends Component implements HasForms, HasTable
@@ -56,20 +50,6 @@ class FilamentHistoryTable extends Component implements HasForms, HasTable
                         'update'        => 'Update',
                     ])
             ]);
-        //return $table
-        //    ->query($this->asset->actionlog)
-        //    ->columns([
-        //        TextColumn::make('name'),
-        //    ])
-        //    ->filters([
-        //        // ...
-        //    ])
-        //    ->actions([
-        //        // ...
-        //    ])
-        //    ->bulkActions([
-        //        // ...
-        //    ]);
     }
 
     public function render()
