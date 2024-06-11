@@ -1,24 +1,10 @@
 @props(['asset' => $asset])
 <div>
 
-<div class="ml-4 grid grid-cols-1 md:grid-cols-2 md:gap-2">
-        {{--        hmm, not sure the best way to componentize this... //shrug will ask marcus--}}
-        {{--        <x-tailwind.datalist>--}}
-        {{--            <x-slot name="label">--}}
-        {{--                Status--}}
-        {{--            </x-slot>--}}
-        {{--            <x-slot name="data">--}}
-        {{--                @if(@$asset->assetstatus->deployable)--}}
-        {{--                   <x-tailwind.check-icon-filled/>--}}
-        {{--                @else--}}
-        {{--                    yellow--}}
-        {{--                @endif--}}
-        {{--                {{ $asset->assetstatus->name }}--}}
-        {{--            </x-slot>--}}
-        {{--        </x-tailwind.datalist>--}}
-        <dl class="grid grid-cols-2 border rounded-md">
-            <dt class="font-bold bg-gray-200 pl-2">Status</dt>
-            <dd class="bg-gray-200 flex items-center">
+    <div class="ml-4 grid grid-cols-1 md:grid-cols-2 md:gap-2">
+        <x-tailwind.dl>
+            <x-tailwind.dl.item flex>
+                <x-slot:label class="font-light">Status</x-slot:label>
                 @if($asset->assetstatus->deployable)
                     <x-tailwind.icons.check-icon-filled/>
                 @else
@@ -26,17 +12,12 @@
                     yellow
                 @endif
                 {{ $asset->assetstatus->name }}
-            </dd>
-            <dt class="font-bold pl-2">Serial</dt>
-            <dd class="">{{ $asset->serial }}</dd>
-            <dt class="font-bold bg-gray-200 pl-2">Category</dt>
-            <dd class="bg-gray-200">{{ $asset->model->category->name }}</dd>
-            <dt class="font-bold pl-2">Model</dt>
-            <dd class="">{{ $asset->model->name }}</dd>
-            <dt class="font-bold bg-gray-200 pl-2">Model No.</dt>
-            <dd class="bg-gray-200">{{ $asset->model->model_number }}</dd>
-            <dt class="font-bold pl-2">BYOD</dt>
-            <dd class="flex items-center">
+            </x-tailwind.dl.item>
+            <x-tailwind.dl.item label="Serial">{{ $asset->serial }}</x-tailwind.dl.item>
+            <x-tailwind.dl.item label="Category">{{ $asset->model->category->name }}</x-tailwind.dl.item>
+            <x-tailwind.dl.item label="Model">{{ $asset->model->name }}</x-tailwind.dl.item>
+            <x-tailwind.dl.item label="Model No.">{{ $asset->model->model_number }}</x-tailwind.dl.item>
+            <x-tailwind.dl.item label="BYOD" flex>
                 @if($asset->byod)
                     <x-tailwind.icons.check-icon/>
                     Yes
@@ -44,8 +25,8 @@
                     <x-tailwind.icons.x-icon/>
                     No
                 @endif
-            </dd>
-        </dl>
+            </x-tailwind.dl.item>
+        </x-tailwind.dl>
 
         <div class="grid-cols-subgrid row-span-3 mr-4 md:justify-self-end">
             <img alt="model image" class="h-72"
