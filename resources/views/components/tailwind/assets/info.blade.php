@@ -48,7 +48,8 @@
         </dl>
 
         <x-tailwind.dl>
-            <x-tailwind.dl.item title="Status" flex>
+            <x-tailwind.dl.item flex>
+                <x-slot:title class="font-light">Status</x-slot:title>
                 @if($asset->assetstatus->deployable)
                     <x-tailwind.icons.check-icon-filled/>
                 @else
