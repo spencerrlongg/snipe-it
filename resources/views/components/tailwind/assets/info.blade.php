@@ -1,8 +1,7 @@
 @props(['asset' => $asset])
 <div>
 
-<div class="ml-4 grid grid-cols-1 md:grid-cols-2 md:gap-2">
-
+    <div class="ml-4 grid grid-cols-1 md:grid-cols-2 md:gap-2">
         <x-tailwind.dl>
             <x-tailwind.dl.item flex>
                 <x-slot:label class="font-light">Status</x-slot:label>
