@@ -49,7 +49,7 @@
 
         <x-tailwind.dl>
             <x-tailwind.dl.item flex>
-                <x-slot:title class="font-light">Status</x-slot:title>
+                <x-slot:label class="font-light">Status</x-slot:label>
                 @if($asset->assetstatus->deployable)
                     <x-tailwind.icons.check-icon-filled/>
                 @else
@@ -58,11 +58,11 @@
                 @endif
                 {{ $asset->assetstatus->name }}
             </x-tailwind.dl.item>
-            <x-tailwind.dl.item title="Serial">{{ $asset->serial }}</x-tailwind.dl.item>
-            <x-tailwind.dl.item title="Category">{{ $asset->model->category->name }}</x-tailwind.dl.item>
-            <x-tailwind.dl.item title="Model">{{ $asset->model->name }}</x-tailwind.dl.item>
-            <x-tailwind.dl.item title="Model No.">{{ $asset->model->model_number }}</x-tailwind.dl.item>
-            <x-tailwind.dl.item title="BYOD" flex>
+            <x-tailwind.dl.item label="Serial">{{ $asset->serial }}</x-tailwind.dl.item>
+            <x-tailwind.dl.item label="Category">{{ $asset->model->category->name }}</x-tailwind.dl.item>
+            <x-tailwind.dl.item label="Model">{{ $asset->model->name }}</x-tailwind.dl.item>
+            <x-tailwind.dl.item label="Model No.">{{ $asset->model->model_number }}</x-tailwind.dl.item>
+            <x-tailwind.dl.item label="BYOD" flex>
                 @if($asset->byod)
                     <x-tailwind.icons.check-icon/>
                     Yes

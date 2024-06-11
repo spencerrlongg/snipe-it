@@ -1,15 +1,15 @@
 @use(\Illuminate\View\ComponentSlot)
 
 @props([
-    'title',
+    'label',
     'flex' => false,
 ])
 
 <div class="grid grid-cols-2 odd:bg-gray-200 px-2">
-    @if ($title instanceof ComponentSlot)
-        <dt {{ $title->attributes->class(['font-bold']) }}>{{ $title }}</dt>
+    @if ($label instanceof ComponentSlot)
+        <dt {{ $label->attributes->class(['font-bold']) }}>{{ $label }}</dt>
     @else
-        <dt class="font-bold">{{ $title }}</dt>
+        <dt class="font-bold">{{ $label }}</dt>
     @endif
     <dd @class(['flex items-center' => $flex])>
         {{ $slot }}
