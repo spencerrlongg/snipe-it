@@ -47,6 +47,31 @@
             </dd>
         </dl>
 
+        <x-tailwind.dl>
+            <x-tailwind.dl.item term="Status" flex>
+                @if($asset->assetstatus->deployable)
+                    <x-tailwind.icons.check-icon-filled/>
+                @else
+                    {{--                    <x-tailwind.icons.check-icon-filled class="text-yellow"--}}
+                    yellow
+                @endif
+                {{ $asset->assetstatus->name }}
+            </x-tailwind.dl.item>
+            <x-tailwind.dl.item term="Serial">{{ $asset->serial }}</x-tailwind.dl.item>
+            <x-tailwind.dl.item term="Category">{{ $asset->model->category->name }}</x-tailwind.dl.item>
+            <x-tailwind.dl.item term="Model">{{ $asset->model->name }}</x-tailwind.dl.item>
+            <x-tailwind.dl.item term="Model No.">{{ $asset->model->model_number }}</x-tailwind.dl.item>
+            <x-tailwind.dl.item term="BYOD" flex>
+                @if($asset->byod)
+                    <x-tailwind.icons.check-icon/>
+                    Yes
+                @else
+                    <x-tailwind.icons.x-icon/>
+                    No
+                @endif
+            </x-tailwind.dl.item>
+        </x-tailwind.dl>
+
         <div class="grid-cols-subgrid row-span-3 mr-4 md:justify-self-end">
             <img alt="model image" class="h-72"
                  src={{ $asset->model->getImageUrl() }} >
