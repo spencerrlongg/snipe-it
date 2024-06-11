@@ -3,6 +3,7 @@
 namespace App\Livewire;
 
 use App\Models\Asset;
+use Filament\Actions\Action;
 use Filament\Forms\Concerns\InteractsWithForms;
 use Filament\Forms\Contracts\HasForms;
 use Filament\Tables\Columns\ImageColumn;
@@ -10,6 +11,7 @@ use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Concerns\InteractsWithTable;
 use Filament\Tables\Contracts\HasTable;
 use Filament\Tables\Table;
+use Illuminate\View\View;
 use Livewire\Component;
 
 class FilamanetAssetTable extends Component implements HasForms, HasTable
@@ -17,12 +19,18 @@ class FilamanetAssetTable extends Component implements HasForms, HasTable
     use InteractsWithTable;
     use InteractsWithForms;
 
-    public Asset $asset;
+    public $asset;
 
     public function table(Table $table, $asset = null): Table
     {
+        if (is_null($this->asset)) {
+            $asset = Asset::query()->with(['model', 'company', 'model.category', 'assetstatus', 'location']);
+        } else {
+            // having to put this here because for some reason it seems like livewire won't take a query builder instance as a prop
+            $asset = $this->asset->assignedAssets->toQuery();
+        }
         return $table
-            ->query(Asset::query()->with(['model', 'company', 'model.category', 'assetstatus', 'location']))
+            ->query($asset)
             ->columns([
                 TextColumn::make('id')->sortable()->searchable()->toggleable(),
                 TextColumn::make('company.name')->sortable()->searchable()->toggleable(),
@@ -31,7 +39,8 @@ class FilamanetAssetTable extends Component implements HasForms, HasTable
                     ->sortable()->searchable()->toggleable(),
                 TextColumn::make('asset_tag')->sortable()->searchable()->toggleable(),
                 TextColumn::make('serial')->sortable()->searchable()->toggleable(),
-                TextColumn::make('model.name')->sortable()->searchable()->toggleable(),
+                TextColumn::make('model.name')->sortable()->searchable()->toggleable()
+                    ->url(fn($record) => route('models.show', $record->model->id)),
                 TextColumn::make('model.model_number')->label('Model No.')->sortable()->searchable()->toggleable(),
                 TextColumn::make('model.category.name')->sortable()->searchable()->toggleable(),
                 TextColumn::make('assetstatus.name')->sortable()->searchable()->toggleable(),
@@ -45,7 +54,7 @@ class FilamanetAssetTable extends Component implements HasForms, HasTable
             ->striped();
     }
 
-    public function render()
+    public function render(): View
     {
         return view('livewire.filamanet-asset-table');
     }

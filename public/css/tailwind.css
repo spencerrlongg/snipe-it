@@ -3470,6 +3470,10 @@ select {
 .last\:border-e-0:last-child {
   border-inline-end-width: 0px;
 }
+.odd\:bg-gray-200:nth-child(odd) {
+  --tw-bg-opacity: 1;
+  background-color: rgba(var(--gray-200), var(--tw-bg-opacity));
+}
 .first-of-type\:ps-1:first-of-type {
   padding-inline-start: 0.25rem;
 }

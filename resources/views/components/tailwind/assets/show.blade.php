@@ -4,11 +4,17 @@
         <x-tailwind.tab name="Info">
             <x-tailwind.assets.info :asset="$asset"/>
         </x-tailwind.tab>
-        <x-tailwind.tab name="Filament License Table">
+        <x-tailwind.tab name="Components">
+
+        </x-tailwind.tab>
+        <x-tailwind.tab name="Licenses">
             <livewire:filament-license-table :asset="$asset"/>
         </x-tailwind.tab>
-        <x-tailwind.tab name="Filament History Table">
+        <x-tailwind.tab name="History">
             <livewire:filament-history-table :asset="$asset"/>
+        </x-tailwind.tab>
+        <x-tailwind.tab name="Assets">
+            <livewire:filamanet-asset-table :asset="$asset"/>
         </x-tailwind.tab>
     </x-tailwind.tabs>
 </x-tailwind.layout>
