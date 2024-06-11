@@ -1,3 +1,3 @@
-<dl class="grid grid-cols-2 border rounded-md">
+<dl class="border rounded-md">
     {{ $slot }}
 </dl>
