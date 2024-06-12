@@ -24,6 +24,7 @@ module.exports = {
             deletered: '#dd4b39',
             green: '#00a65a',
             black: '#000000',
+            yellow: '#FFDA29'
         }
     },
     plugins: [],

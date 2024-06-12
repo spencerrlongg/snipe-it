@@ -19,7 +19,7 @@ class FilamentHistoryTable extends Component implements HasForms, HasTable
     use InteractsWithTable;
     use InteractsWithForms;
 
-    public Asset $asset;
+    public $asset;
 
     public function table(Table $table, $asset = null): Table
     {
@@ -38,6 +38,7 @@ class FilamentHistoryTable extends Component implements HasForms, HasTable
                     ->sortable()->searchable()->toggleable(),
                 //TextColumn::make('log_meta')->sortable()->searchable()->sortable()->toggleable(),
                 TextColumn::make('user.first_name')->exists('user')->label('Target')
+                    ->url(fn($record) => $record->user ? route('users.show', $record->user->id) : null)
                     ->sortable()->searchable()->toggleable()
             ])
             ->striped()

@@ -18,7 +18,7 @@ class FilamentLicenseTable extends Component implements HasForms, HasTable
     use InteractsWithTable;
     use InteractsWithForms;
 
-    public Asset $asset;
+    public $asset;
 
     public function table(Table $table, Asset $asset = null)
     {

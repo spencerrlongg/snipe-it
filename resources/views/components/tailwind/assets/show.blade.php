@@ -5,7 +5,7 @@
             <x-tailwind.assets.info :asset="$asset"/>
         </x-tailwind.tab>
         <x-tailwind.tab name="Components">
-
+            <livewire:component-table :asset="$asset"/>
         </x-tailwind.tab>
         <x-tailwind.tab name="Licenses">
             <livewire:filament-license-table :asset="$asset"/>

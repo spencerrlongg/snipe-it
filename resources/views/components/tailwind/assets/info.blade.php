@@ -4,12 +4,11 @@
     <div class="ml-4 grid grid-cols-1 md:grid-cols-2 md:gap-2">
         <x-tailwind.dl>
             <x-tailwind.dl.item flex>
-                <x-slot:label class="font-light">Status</x-slot:label>
+                <x-slot:label>Status</x-slot:label>
                 @if($asset->assetstatus->deployable)
                     <x-tailwind.icons.check-icon-filled/>
                 @else
-                    {{--                    <x-tailwind.icons.check-icon-filled class="text-yellow"--}}
-                    yellow
+                    <x-tailwind.icons.check-icon-filled class="text-yellow"
                 @endif
                 {{ $asset->assetstatus->name }}
             </x-tailwind.dl.item>
