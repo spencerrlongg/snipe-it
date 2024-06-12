@@ -1,5 +1,5 @@
 <x-tailwind.layout>
-    <h1 class="text-2xl m-4">View Asset {{ $asset->asset_tag }}</h1>
+    <h1 class="text-2xl m-4">{{ __('admin/hardware/general.view') .' '. $asset->asset_tag }}</h1>
     <x-tailwind.tabs active="Info">
         <x-tailwind.tab name="{{ __('admin/users/general.info') }}">
             <x-tailwind.assets.info :asset="$asset"/>

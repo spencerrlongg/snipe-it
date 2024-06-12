@@ -25,9 +25,12 @@ class FilamanetAssetTable extends Component implements HasForms, HasTable
     {
         if (is_null($this->asset)) {
             $asset = Asset::query()->with(['model', 'company', 'model.category', 'assetstatus', 'location']);
-        } else {
+        }
+        if ($this->asset->assignedAssets->count() > 0) {
             // having to put this here because for some reason it seems like livewire won't take a query builder instance as a prop
-            $asset = $this->asset->assignedAssets->toQuery();
+            $asset = $this->asset->assignedAssets?->toQuery();
+        } else {
+            $asset = Asset::query()->where('id', 0);
         }
         return $table
             ->query($asset)

@@ -30,9 +30,9 @@ use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
 
 Route::group(['middleware' => 'auth'], function () {
-    Route::get('/tailwind-demo', function () {
+    Route::get('/tailwind-demo/{asset}', function (Asset $asset) {
         return view('components.tailwind.assets.show', [
-            'asset' => Asset::find(1),
+            'asset' => $asset,
         ]);
     });
     Route::get('/tailwind-asset-index', function () {
