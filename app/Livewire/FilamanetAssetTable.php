@@ -25,8 +25,7 @@ class FilamanetAssetTable extends Component implements HasForms, HasTable
     {
         if (is_null($this->asset)) {
             $asset = Asset::query()->with(['model', 'company', 'model.category', 'assetstatus', 'location']);
-        }
-        if ($this->asset->assignedAssets->count() > 0) {
+        } elseif ($this->asset->assignedAssets->count() > 0) {
             // having to put this here because for some reason it seems like livewire won't take a query builder instance as a prop
             $asset = $this->asset->assignedAssets?->toQuery();
         } else {
@@ -54,7 +53,10 @@ class FilamanetAssetTable extends Component implements HasForms, HasTable
                 TextColumn::make('location.name')->sortable()->searchable()->toggleable(),
             ])
             ->selectable()
-            ->striped();
+            ->striped()
+            ->recordUrl(
+                fn(Asset $record): string => route('tailwind.demo', $record->id),
+            );
     }
 
     public function render(): View

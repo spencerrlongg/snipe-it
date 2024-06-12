@@ -34,12 +34,14 @@ Route::group(['middleware' => 'auth'], function () {
         return view('components.tailwind.assets.show', [
             'asset' => $asset,
         ]);
-    });
+    })->name('tailwind.demo');
+
     Route::get('/tailwind-asset-index', function () {
         return view('components.tailwind.assets.index', [
-            'asset' => Asset::find(1),
+            //'asset' => Asset::find(1),
         ]);
-    });
+    })->name('tailwind.asset.index');
+
     Route::get('/filament-demo', FilamentHistoryTable::class);
     /*
     * Companies
