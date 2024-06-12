@@ -1,3 +1,4 @@
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
 <body class="bg-gray-50">
 <head>
     <title>{{ $title ?? 'Snipe IT' }}</title>
@@ -71,3 +72,4 @@
 @filamentScripts
 @livewireScripts
 </body>
+</html>
