@@ -1791,6 +1791,10 @@ select {
 .inset-4 {
   inset: 1rem;
 }
+.inset-x-0 {
+  left: 0px;
+  right: 0px;
+}
 .-top-1 {
   top: -0.25rem;
 }
@@ -2436,6 +2440,9 @@ select {
 }
 .grid-cols-2 {
   grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+.grid-cols-3 {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
 }
 .grid-cols-7 {
   grid-template-columns: repeat(7, minmax(0, 1fr));
@@ -3178,6 +3185,10 @@ select {
   --tw-text-opacity: 1;
   color: rgba(var(--c-400), var(--tw-text-opacity));
 }
+.text-custom-50 {
+  --tw-text-opacity: 1;
+  color: rgba(var(--c-50), var(--tw-text-opacity));
+}
 .text-custom-500 {
   --tw-text-opacity: 1;
   color: rgba(var(--c-500), var(--tw-text-opacity));
@@ -3196,6 +3207,10 @@ select {
 .text-deletered {
   --tw-text-opacity: 1;
   color: rgb(221 75 57 / var(--tw-text-opacity));
+}
+.text-gray-100 {
+  --tw-text-opacity: 1;
+  color: rgba(var(--gray-100), var(--tw-text-opacity));
 }
 .text-gray-200 {
   --tw-text-opacity: 1;
@@ -3790,6 +3805,9 @@ select {
   --tw-text-opacity: 1;
   color: rgba(var(--c-400), var(--tw-text-opacity));
 }
+.dark\:text-custom-400\/10:is(.dark *) {
+  color: rgba(var(--c-400), 0.1);
+}
 .dark\:text-danger-400:is(.dark *) {
   --tw-text-opacity: 1;
   color: rgba(var(--danger-400), var(--tw-text-opacity));
@@ -3816,6 +3834,10 @@ select {
 .dark\:text-gray-700:is(.dark *) {
   --tw-text-opacity: 1;
   color: rgba(var(--gray-700), var(--tw-text-opacity));
+}
+.dark\:text-gray-800:is(.dark *) {
+  --tw-text-opacity: 1;
+  color: rgba(var(--gray-800), var(--tw-text-opacity));
 }
 .dark\:text-primary-400:is(.dark *) {
   --tw-text-opacity: 1;
@@ -4019,6 +4041,11 @@ select {
   .sm\:-mx-6 {
     margin-left: -1.5rem;
     margin-right: -1.5rem;
+  }
+
+  .sm\:-my-2 {
+    margin-top: -0.5rem;
+    margin-bottom: -0.5rem;
   }
 
   .sm\:ms-auto {
@@ -4235,6 +4262,10 @@ select {
     grid-auto-flow: column;
   }
 
+  .md\:grid-cols-1 {
+    grid-template-columns: repeat(1, minmax(0, 1fr));
+  }
+
   .md\:grid-cols-2 {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
@@ -4421,6 +4452,10 @@ select {
   .xl\:columns-\[--cols-xl\] {
     -moz-columns: var(--cols-xl);
          columns: var(--cols-xl);
+  }
+
+  .xl\:grid-cols-4 {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
   }
 
   .xl\:grid-cols-\[--cols-xl\] {
