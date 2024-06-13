@@ -2,6 +2,7 @@
 
 namespace App\Livewire;
 
+use App\Helpers\Helper;
 use App\Models\Asset;
 use Filament\Tables\Actions\Action;
 use Filament\Forms\Concerns\InteractsWithForms;
@@ -71,12 +72,11 @@ class FilamanetAssetTable extends Component implements HasForms, HasTable
                 //BulkAction::make('Edit')->action(function (Collection $records, Component $livewire): void {
                 //    $livewire->redirectRoute(name: 'hardware/bulkedit', parameters: ['ids' => $records->pluck('id')]);
                 //}),
+                BulkAction::make('Edit')->action(fn($records) => $this->returnView($records)),
             ])
             ->filters([
-                //and THIS doesn't work because it's a query builder instance, so i guess we'd need to build up the filter here.
-                //DOUBLE UGH
-                //Filter::make('is_available')
-                //    ->query(fn(Builder $query): Builder => $query->asset->availableForCheckout())
+                Filter::make('rtd')->label('RTD')
+                    ->query(fn(Builder $query): Builder => $query->rtd())
             ])
             ->recordUrl(
                 fn(Asset $record): string => route('tailwind.demo', $record->id),
@@ -87,5 +87,19 @@ class FilamanetAssetTable extends Component implements HasForms, HasTable
     public function render(): View
     {
         return view('livewire.filamanet-asset-table');
+    }
+
+    public function returnView($records): View
+    {
+        $models = $records->unique('model_id');
+        $modelNames = [];
+        foreach ($models as $model) {
+            $modelNames[] = $model->model->name;
+        }
+        return view('hardware/bulk')
+            ->with('assets', $records->pluck('id'))
+            ->with('statuslabel_list', Helper::statusLabelList())
+            ->with('models', $models->pluck(['model']))
+            ->with('modelNames', $modelNames);
     }
 }

@@ -4232,6 +4232,10 @@ select {
     display: table-cell;
   }
 
+  .md\:grid {
+    display: grid;
+  }
+
   .md\:inline-grid {
     display: inline-grid;
   }
