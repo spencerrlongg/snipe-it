@@ -42,6 +42,13 @@ Route::group(['middleware' => 'auth'], function () {
         ]);
     })->name('tailwind.asset.index');
 
+    Route::get('/tailwind-dashboard', function () {
+        return view('components.tailwind.dashboard', [
+            // data fetch should probably happen in the components, this way we're not passing a bunch
+            // of data for charts that may not be displayed in a customized dashboard
+        ]);
+    });
+
     Route::get('/filament-demo', FilamentHistoryTable::class);
     /*
     * Companies

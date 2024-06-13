@@ -35,6 +35,8 @@
         "enshrined/svg-sanitize": "^0.15.0",
         "erusev/parsedown": "^1.7",
         "filament/tables": "^3.2",
+        "filament/widgets": "^3.2",
+        "flowframe/laravel-trend": "^0.2.0",
         "guzzlehttp/guzzle": "^7.0.1",
         "intervention/image": "^2.5",
         "javiereguiluz/easyslugger": "^1.0",
