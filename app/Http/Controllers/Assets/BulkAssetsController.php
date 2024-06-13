@@ -43,6 +43,7 @@ class BulkAssetsController extends Controller
      */
     public function edit(Request $request)
     {
+        dd($request->all());
         $this->authorize('view', Asset::class);
 
         /**

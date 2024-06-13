@@ -3,14 +3,18 @@
 namespace App\Livewire;
 
 use App\Models\Asset;
-use Filament\Actions\Action;
+use Filament\Tables\Actions\Action;
 use Filament\Forms\Concerns\InteractsWithForms;
 use Filament\Forms\Contracts\HasForms;
+use Filament\Tables\Actions\BulkAction;
 use Filament\Tables\Columns\ImageColumn;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Concerns\InteractsWithTable;
 use Filament\Tables\Contracts\HasTable;
+use Filament\Tables\Filters\Filter;
 use Filament\Tables\Table;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\Collection;
 use Illuminate\View\View;
 use Livewire\Component;
 
@@ -31,6 +35,7 @@ class FilamanetAssetTable extends Component implements HasForms, HasTable
         } else {
             $asset = Asset::query()->where('id', 0);
         }
+
         return $table
             ->query($asset)
             ->columns([
@@ -54,9 +59,29 @@ class FilamanetAssetTable extends Component implements HasForms, HasTable
             ])
             ->selectable()
             ->striped()
+            ->actions([
+                Action::make('Checkout')
+                    ->url(fn($record) => route('hardware.checkout.create', ['assetId' => $record->id]))
+                    ->openUrlInNewTab(),
+            ])
+            ->bulkActions([
+                //this doesn't work, it's a post route so livewire redirectRoute doesn't work.
+                //url doesn't work either because ->url() is generated on page load, so you can't pass in the user-selected arguments.
+                //UGH
+                //BulkAction::make('Edit')->action(function (Collection $records, Component $livewire): void {
+                //    $livewire->redirectRoute(name: 'hardware/bulkedit', parameters: ['ids' => $records->pluck('id')]);
+                //}),
+            ])
+            ->filters([
+                //and THIS doesn't work because it's a query builder instance, so i guess we'd need to build up the filter here.
+                //DOUBLE UGH
+                //Filter::make('is_available')
+                //    ->query(fn(Builder $query): Builder => $query->asset->availableForCheckout())
+            ])
             ->recordUrl(
                 fn(Asset $record): string => route('tailwind.demo', $record->id),
             );
+
     }
 
     public function render(): View
