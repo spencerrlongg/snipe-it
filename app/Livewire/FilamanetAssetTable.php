@@ -69,10 +69,11 @@ class FilamanetAssetTable extends Component implements HasForms, HasTable
                 //this doesn't work, it's a post route so livewire redirectRoute doesn't work.
                 //url doesn't work either because ->url() is generated on page load, so you can't pass in the user-selected arguments.
                 //UGH
-                //BulkAction::make('Edit')->action(function (Collection $records, Component $livewire): void {
-                //    $livewire->redirectRoute(name: 'hardware/bulkedit', parameters: ['ids' => $records->pluck('id')]);
-                //}),
-                BulkAction::make('Edit')->action(fn($records) => $this->returnView($records)),
+                //BulkAction::make('Edit')->url(fn($records) => route('hardware/bulkedit', $records?->pluck('id'))),
+                BulkAction::make('Edit')->action(function (Collection $records, Component $livewire): void {
+                    $livewire->redirectRoute(name: 'hardware/bulkedit', parameters: ['ids' => $records->pluck('id'), 'bulk_actions' => 'edit']);
+                }),
+                //BulkAction::make('Edit')->action(fn($records) => $this->returnView($records)),
             ])
             ->filters([
                 Filter::make('rtd')->label('RTD')

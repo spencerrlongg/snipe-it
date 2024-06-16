@@ -2,6 +2,7 @@
 
 namespace App\Livewire;
 
+use App\Models\Asset;
 use App\Models\Component;
 use Filament\Forms\Concerns\InteractsWithForms;
 use Filament\Forms\Contracts\HasForms;
@@ -22,10 +23,21 @@ class ComponentTable extends LivewireComponent implements HasForms, HasTable
     use InteractsWithForms;
     use InteractsWithTable;
 
-    public function table(Table $table): Table
+    public $asset;
+
+    public function table(Table $table, Asset $asset = null): Table
     {
+        if (is_null($this->asset)) {
+            $query = Component::query();
+        } elseif ($this->asset->components->count() > 0) {
+            // having to put this here because for some reason it seems like livewire won't take a query builder instance as a prop
+            $query = $this->asset->components?->toQuery();
+        } else {
+            $query = Component::query();
+        }
+
         return $table
-            ->query(Component::query())
+            ->query($query)
             ->columns([
                 Tables\Columns\TextColumn::make('name')
                     ->searchable(),
