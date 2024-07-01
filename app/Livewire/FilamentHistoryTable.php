@@ -50,7 +50,8 @@ class FilamentHistoryTable extends Component implements HasForms, HasTable
                         'checkin from ' => 'Checkin',
                         'update'        => 'Update',
                     ])
-            ]);
+            ])
+            ->queryStringIdentifier('history');
     }
 
     public function render()
