@@ -14,29 +14,32 @@ class ActionlogSeeder extends Seeder
     {
         Actionlog::truncate();
 
-        if (! Asset::count()) {
+        if (!Asset::count()) {
             $this->call(AssetSeeder::class);
         }
 
-        if (! Location::count()) {
+        if (!Location::count()) {
             $this->call(LocationSeeder::class);
         }
 
         $admin = User::where('permissions->superuser', '1')->first() ?? User::factory()->firstAdmin()->create();
 
-        Actionlog::factory()
-            ->count(300)
-            ->assetCheckoutToUser()
-            ->create(['user_id' => $admin->id]);
+        if (config('app.large_seeder')) {
+            $records = [
+                Actionlog::factory()->count(300_000)->assetCheckoutToUser()->make(['user_id' => $admin->id]),
+                Actionlog::factory()->count(100_000)->assetCheckoutToLocation()->make(['user_id' => $admin->id]),
+                Actionlog::factory()->count(20_000)->licenseCheckoutToUser()->make(['user_id' => $admin->id]),
+            ];
 
-        Actionlog::factory()
-            ->count(100)
-            ->assetCheckoutToLocation()
-            ->create(['user_id' => $admin->id]);
-
-        Actionlog::factory()
-            ->count(20)
-            ->licenseCheckoutToUser()
-            ->create(['user_id' => $admin->id]);
+            foreach ($records as $record) {
+                $record->chunk(2000)->each(function ($records) {
+                    Actionlog::insert($records->toArray());
+                });
+            }
+        } else {
+            Actionlog::factory()->count(300)->assetCheckoutToUser()->create(['user_id' => $admin->id]);
+            Actionlog::factory()->count(100)->assetCheckoutToLocation()->create(['user_id' => $admin->id]);
+            Actionlog::factory()->count(20)->licenseCheckoutToUser()->create(['user_id' => $admin->id]);
+        }
     }
 }

@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\Actionlog;
 use App\Models\Asset;
 use App\Models\Location;
 use App\Models\Supplier;
@@ -29,26 +30,58 @@ class AssetSeeder extends Seeder
         $this->locationIds = Location::all()->pluck('id');
         $this->supplierIds = Supplier::all()->pluck('id');
 
-        Asset::factory()->count(2000)->laptopMbp()->state(new Sequence($this->getState()))->create();
-        Asset::factory()->count(50)->laptopMbpPending()->state(new Sequence($this->getState()))->create();
-        Asset::factory()->count(50)->laptopMbpArchived()->state(new Sequence($this->getState()))->create();
-        Asset::factory()->count(50)->laptopAir()->state(new Sequence($this->getState()))->create();
-        Asset::factory()->count(50)->laptopSurface()->state(new Sequence($this->getState()))->create();
-        Asset::factory()->count(5)->laptopXps()->state(new Sequence($this->getState()))->create();
-        Asset::factory()->count(5)->laptopSpectre()->state(new Sequence($this->getState()))->create();
-        Asset::factory()->count(50)->laptopZenbook()->state(new Sequence($this->getState()))->create();
-        Asset::factory()->count(30)->laptopYoga()->state(new Sequence($this->getState()))->create();
-        Asset::factory()->count(30)->desktopMacpro()->state(new Sequence($this->getState()))->create();
-        Asset::factory()->count(30)->desktopLenovoI5()->state(new Sequence($this->getState()))->create();
-        Asset::factory()->count(30)->desktopOptiplex()->state(new Sequence($this->getState()))->create();
-        Asset::factory()->count(50)->confPolycom()->state(new Sequence($this->getState()))->create();
-        Asset::factory()->count(20)->confPolycomcx()->state(new Sequence($this->getState()))->create();
-        Asset::factory()->count(30)->tabletIpad()->state(new Sequence($this->getState()))->create();
-        Asset::factory()->count(10)->tabletTab3()->state(new Sequence($this->getState()))->create();
-        Asset::factory()->count(27)->phoneIphone11()->state(new Sequence($this->getState()))->create();
-        Asset::factory()->count(40)->phoneIphone12()->state(new Sequence($this->getState()))->create();
-        Asset::factory()->count(20)->ultrafine()->state(new Sequence($this->getState()))->create();
-        Asset::factory()->count(20)->ultrasharp()->state(new Sequence($this->getState()))->create();
+        if (config('app.large_seeder')) {
+            $records = [
+                Asset::factory()->count(200_000)->laptopMbp()->state(new Sequence($this->getState()))->make(),
+                Asset::factory()->count(5_000)->laptopMbpPending()->state(new Sequence($this->getState()))->make(),
+                Asset::factory()->count(5_000)->laptopMbpArchived()->state(new Sequence($this->getState()))->make(),
+                Asset::factory()->count(5_000)->laptopAir()->state(new Sequence($this->getState()))->make(),
+                Asset::factory()->count(5_000)->laptopSurface()->state(new Sequence($this->getState()))->make(),
+                Asset::factory()->count(500)->laptopXps()->state(new Sequence($this->getState()))->make(),
+                Asset::factory()->count(500)->laptopSpectre()->state(new Sequence($this->getState()))->make(),
+                Asset::factory()->count(5_000)->laptopZenbook()->state(new Sequence($this->getState()))->make(),
+                Asset::factory()->count(3_000)->laptopYoga()->state(new Sequence($this->getState()))->make(),
+                Asset::factory()->count(3_000)->desktopMacpro()->state(new Sequence($this->getState()))->make(),
+                Asset::factory()->count(3_000)->desktopLenovoI5()->state(new Sequence($this->getState()))->make(),
+                Asset::factory()->count(3_000)->desktopOptiplex()->state(new Sequence($this->getState()))->make(),
+                Asset::factory()->count(5_000)->confPolycom()->state(new Sequence($this->getState()))->make(),
+                Asset::factory()->count(2_000)->confPolycomcx()->state(new Sequence($this->getState()))->make(),
+                Asset::factory()->count(3_000)->tabletIpad()->state(new Sequence($this->getState()))->make(),
+                Asset::factory()->count(1_000)->tabletTab3()->state(new Sequence($this->getState()))->make(),
+                Asset::factory()->count(270)->phoneIphone11()->state(new Sequence($this->getState()))->make(),
+                Asset::factory()->count(400)->phoneIphone12()->state(new Sequence($this->getState()))->make(),
+                Asset::factory()->count(200)->ultrafine()->state(new Sequence($this->getState()))->make(),
+                Asset::factory()->count(200)->ultrasharp()->state(new Sequence($this->getState()))->make(),
+            ];
+
+            foreach ($records as $record) {
+                $record->chunk(2000)->each(function ($chunk) {
+                    Actionlog::insert($chunk->toArray());
+                });
+            }
+
+        } else {
+            Asset::factory()->count(2000)->laptopMbp()->state(new Sequence($this->getState()))->create();
+            Asset::factory()->count(50)->laptopMbpPending()->state(new Sequence($this->getState()))->create();
+            Asset::factory()->count(50)->laptopMbpArchived()->state(new Sequence($this->getState()))->create();
+            Asset::factory()->count(50)->laptopAir()->state(new Sequence($this->getState()))->create();
+            Asset::factory()->count(50)->laptopSurface()->state(new Sequence($this->getState()))->create();
+            Asset::factory()->count(5)->laptopXps()->state(new Sequence($this->getState()))->create();
+            Asset::factory()->count(5)->laptopSpectre()->state(new Sequence($this->getState()))->create();
+            Asset::factory()->count(50)->laptopZenbook()->state(new Sequence($this->getState()))->create();
+            Asset::factory()->count(30)->laptopYoga()->state(new Sequence($this->getState()))->create();
+            Asset::factory()->count(30)->desktopMacpro()->state(new Sequence($this->getState()))->create();
+            Asset::factory()->count(30)->desktopLenovoI5()->state(new Sequence($this->getState()))->create();
+            Asset::factory()->count(30)->desktopOptiplex()->state(new Sequence($this->getState()))->create();
+            Asset::factory()->count(50)->confPolycom()->state(new Sequence($this->getState()))->create();
+            Asset::factory()->count(20)->confPolycomcx()->state(new Sequence($this->getState()))->create();
+            Asset::factory()->count(30)->tabletIpad()->state(new Sequence($this->getState()))->create();
+            Asset::factory()->count(10)->tabletTab3()->state(new Sequence($this->getState()))->create();
+            Asset::factory()->count(27)->phoneIphone11()->state(new Sequence($this->getState()))->create();
+            Asset::factory()->count(40)->phoneIphone12()->state(new Sequence($this->getState()))->create();
+            Asset::factory()->count(20)->ultrafine()->state(new Sequence($this->getState()))->create();
+            Asset::factory()->count(20)->ultrasharp()->state(new Sequence($this->getState()))->create();
+        }
 
         $del_files = Storage::files('assets');
         foreach ($del_files as $del_file) { // iterate files
