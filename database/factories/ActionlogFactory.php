@@ -84,27 +84,30 @@ class ActionlogFactory extends Factory
         });
     }
 
-    public function licenseCheckoutToUser()
-    {
-        return $this->state(function () {
-            $target = User::inRandomOrder()->first();
-            $licenseSeat = LicenseSeat::whereNull('assigned_to')->inRandomOrder()->first();
-
-            $licenseSeat->update([
-                'assigned_to' => $target->id,
-                'user_id' => 1, // not ideal but works
-            ]);
-
-            return [
-                'created_at'  => $this->faker->dateTimeBetween('-1 years', 'now', date_default_timezone_get()),
-                'action_type' => 'checkout',
-                'item_id' => $licenseSeat->license->id,
-                'item_type'  => License::class,
-                'target_id' => $target->id,
-                'target_type' => User::class,
-            ];
-        });
-    }
+    //public function licenseCheckoutToUser()
+    //{
+    //    return $this->state(function () {
+    //        $target = User::inRandomOrder()->first();
+    //        $licenseSeat = LicenseSeat::whereNull('assigned_to')->inRandomOrder()->first();
+    //
+    //        if ($licenseSeat) {
+    //            $licenseSeat->update([
+    //                'assigned_to' => $target->id,
+    //                'user_id'     => 1, // not ideal but works
+    //            ]);
+    //
+    //            return [
+    //                'created_at'  => $this->faker->dateTimeBetween('-1 years', 'now', date_default_timezone_get()),
+    //                'action_type' => 'checkout',
+    //                'item_id'     => $licenseSeat->license->id,
+    //                'item_type'   => License::class,
+    //                'target_id'   => $target->id,
+    //                'target_type' => User::class,
+    //            ];
+    //        }
+    //    });
+    //
+    //}
 
     public function filesUploaded()
     {

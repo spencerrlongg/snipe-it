@@ -20,8 +20,6 @@ class AssetSeeder extends Seeder
 
     public function run()
     {
-        Asset::truncate();
-
         $this->ensureLocationsSeeded();
         $this->ensureSuppliersSeeded();
 
