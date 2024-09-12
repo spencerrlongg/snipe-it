@@ -28,7 +28,7 @@ class FilamentHistoryTable extends Component implements HasForms, HasTable
             ->columns([
                 TextColumn::make('created_at')->numeric()->dateTime('Y-m-d h:i:s a')->sortable()->searchable()->toggleable(),
                 TextColumn::make('admin.first_name')->exists('admin')
-                    ->getStateUsing(fn($record) => $record->admin->first_name.' '.$record->admin->last_name)
+                    ->getStateUsing(fn($record) => $record->admin?->first_name.' '.$record->admin?->last_name)
                     ->url(fn($record) => route('users.show', $record->admin->id))
                     ->sortable()->searchable()->toggleable(),
                 TextColumn::make('action_type')->sortable()->searchable()->toggleable(),
