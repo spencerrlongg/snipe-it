@@ -109,15 +109,18 @@ class AssetsController extends Controller
      */
     public function store(StoreAssetRequest $request): RedirectResponse
     {
-        $asset_tags = $request->input('asset_tags');
-        $serials = $request->input('serials');
-        for ($a = 1; $a <= count($asset_tags); $a++) {
-            $asset = CreateAsset::run(...$request->validated(), asset_tag: $asset_tags[$a], serial: $serials[$a]);
-
+        try {
+            $asset_tags = $request->input('asset_tags');
+            $serials = $request->input('serials');
+            DB::transaction(function () use ($request, $asset_tags, $serials) {
+                for ($a = 1; $a <= count($asset_tags); $a++) {
+                    $asset = CreateAsset::run(...$request->validated(), asset_tag: $asset_tags[$a], serial: $serials[$a]);
+                }
+            });
+            return redirect()->route('hardware.index')->with('success', trans('admin/hardware/message.create.success'));
+        } catch (\Exception $e) {
+            return redirect()->route('hardware.index')->with('error', trans('admin/hardware/message.create.error'));
         }
-
-        return redirect()->route('hardware.index')->with('success', trans('admin/hardware/message.create.success'));
-
 
 
 
