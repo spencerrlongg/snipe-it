@@ -36,14 +36,16 @@ class AddEolDateOnAssetsTable extends Migration
         // that do not yet exist on the assets table.
         AssetModel::whereNotNull('eol')->chunk(10, function ($models) {
             foreach ($models as $model) {
-                foreach ($model->assets as $asset) {
+                $model->assets->chunk(100, function ($assets) use ($model) {
+                    foreach ($model->assets as $asset) {
 
-                    if ($asset->purchase_date!='') {
-                        $asset->asset_eol_date = $asset->present()->eol_date();
-                        $asset->saveQuietly();
+                        if ($asset->purchase_date != '') {
+                            $asset->asset_eol_date = $asset->present()->eol_date();
+                            $asset->saveQuietly();
+                        }
+
                     }
-
-                }
+                });
             }
         });
 
