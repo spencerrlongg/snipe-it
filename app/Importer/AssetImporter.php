@@ -180,17 +180,24 @@ class AssetImporter extends ItemImporter
             //-- created_by is a property of the abstract class Importer, which this class inherits from and it's set by
             //-- the class that needs to use it (command importer or GUI importer inside the project).
             if (isset($target) && ($target !== false)) {
-                if (!is_null($asset->assigned_to)){
+                if (!is_null($asset->assigned_to)) {
                     if ($asset->assigned_to != $target->id) {
                         event(new CheckoutableCheckedIn($asset, User::find($asset->assigned_to), auth()->user(), 'Checkin from CSV Importer', $checkin_date));
                     }
                 }
 
-                $asset->fresh()->checkOut($target, $this->created_by, $checkout_date, null, 'Checkout from CSV Importer',  $asset->name);
+                $asset->fresh()->checkOut($target, $this->created_by, $checkout_date, null, 'Checkout from CSV Importer', $asset->name);
             }
 
             return;
+        } else {
+            if ($asset->errors && isset($asset->errors['serial_number'])) {
+                // Catching duplicate serial validation error
+                $duplicate_serial_error = $asset->errors['serial_number'];
+                $this->log('Duplicate serial number detected, but continuing import: '.$this->item['serial']);
+            }
         }
+
         $this->logError($asset, 'Asset "'.$this->item['name'].'"');
     }
 
