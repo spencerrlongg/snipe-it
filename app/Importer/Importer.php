@@ -453,7 +453,11 @@ abstract class Importer
     {
         // Some initial sanitization.
         $fields = array_map('strtolower', $fields);
-        $this->fieldMap = array_merge($this->defaultFieldMap, $fields);
+        if ($fields) {
+            $this->fieldMap = $fields;
+        } else {
+            $this->fieldMap = $this->defaultFieldMap;
+        }
 
         // $this->log($this->fieldMap);
         return $this;
