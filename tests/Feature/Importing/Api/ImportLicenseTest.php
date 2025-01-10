@@ -281,6 +281,7 @@ class ImportLicenseTest extends ImportDataTestCase implements TestsPermissionsRe
     public function customColumnMapping(): void
     {
         $faker = ImportFileBuilder::times()->definition();
+        dump($faker);
         $row = [
             'category'         => $faker['supplierName'],
             'companyName'      => $faker['serialNumber'],
@@ -315,7 +316,7 @@ class ImportLicenseTest extends ImportDataTestCase implements TestsPermissionsRe
                 'reassignable'     => 'purchase_cost',
                 'Licensed To Name' => 'order_number',
                 'Licensed To Email' => 'notes',
-                'licenseName'      => 'name',
+                'licenseName' => 'licenseName',
                 'manufacturer'     => 'category',
                 'Notes'            => 'company',
                 'Serial number'    => 'license_email',
@@ -331,8 +332,9 @@ class ImportLicenseTest extends ImportDataTestCase implements TestsPermissionsRe
             ->with(['category', 'company', 'manufacturer', 'supplier'])
             ->where('serial', $row['companyName'])
             ->sole();
+        dump($newLicense->toArray());
 
-        $this->assertEquals($row['licenseName'], $newLicense->name);
+        $this->assertEquals($row['licenseName'], $newLicense->licenseName);
         $this->assertEquals($row['companyName'], $newLicense->serial);
         $this->assertEquals($row['isMaintained'], $newLicense->purchase_date->toDateString());
         $this->assertEquals($row['isReassignAble'], $newLicense->purchase_cost);
