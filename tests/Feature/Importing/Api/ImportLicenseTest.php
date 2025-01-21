@@ -50,6 +50,7 @@ class ImportLicenseTest extends ImportDataTestCase implements TestsPermissionsRe
     public function importLicenses(): void
     {
         $importFileBuilder = ImportFileBuilder::new();
+        dump($importFileBuilder->definition());
         $row = $importFileBuilder->firstRow();
         $import = Import::factory()->license()->create(['file_path' => $importFileBuilder->saveToImportsDirectory()]);
 
@@ -281,7 +282,6 @@ class ImportLicenseTest extends ImportDataTestCase implements TestsPermissionsRe
     public function customColumnMapping(): void
     {
         $faker = ImportFileBuilder::times()->definition();
-        dump($faker);
         $row = [
             'category'         => $faker['supplierName'],
             'companyName'      => $faker['serialNumber'],
@@ -296,7 +296,7 @@ class ImportLicenseTest extends ImportDataTestCase implements TestsPermissionsRe
             'orderNumber'      => $faker['expirationDate'],
             'purchaseCost'     => $faker['isMaintained'],
             'purchaseDate'     => $faker['isReassignAble'],
-            'seats'            => $faker['licensedToName'],
+            'seats' => $faker['seats'],
             'serialNumber'     => $faker['licensedToEmail'],
             'supplierName'     => $faker['manufacturerName']
         ];
@@ -309,39 +309,38 @@ class ImportLicenseTest extends ImportDataTestCase implements TestsPermissionsRe
         $this->importFileResponse([
             'import' => $import->id,
             'column-mappings' => [
-                'Category'         => 'supplier',
-                'Company'          => 'serial',
-                'expiration date'  => 'seats',
-                'maintained'       => 'purchase_date',
-                'reassignable'     => 'purchase_cost',
-                'Licensed To Name' => 'order_number',
-                'Licensed To Email' => 'notes',
-                'licenseName' => 'licenseName',
-                'manufacturer'     => 'category',
-                'Notes'            => 'company',
-                'Serial number'    => 'license_email',
-                'Order Number'     => 'expiration_date',
-                'purchase Cost'    => 'maintained',
-                'purchase Date'    => 'reassignable',
-                'seats'            => 'license_name',
-                'supplier'         => 'manufacturer'
-            ]
+                "Category"          => "supplier",
+                "Company"           => "serial",
+                "expiration date"   => "seats",
+                "maintained"        => "purchase_date",
+                "reassignable"      => "purchase_cost",
+                "Licensed To Name"  => "order_number",
+                "Licensed To Email" => "notes",
+                "item name"         => "name",  // Correct mapping for name
+                "manufacturer"      => "category",
+                "Notes"             => "company",
+                "Serial number"     => "license_email",
+                "Order Number"      => "expiration_date",
+                "purchase Cost"     => "maintained",
+                "purchase Date"     => "reassignable",
+                "seats"             => "seats",    // Ensure this aligns correctly
+                "supplier"          => "manufacturer",
+            ],
         ])->assertOk();
 
         $newLicense = License::query()
             ->with(['category', 'company', 'manufacturer', 'supplier'])
             ->where('serial', $row['companyName'])
             ->sole();
-        dump($newLicense->toArray());
 
-        $this->assertEquals($row['licenseName'], $newLicense->licenseName);
+        $this->assertEquals($row['licenseName'], $newLicense->name);
         $this->assertEquals($row['companyName'], $newLicense->serial);
         $this->assertEquals($row['isMaintained'], $newLicense->purchase_date->toDateString());
         $this->assertEquals($row['isReassignAble'], $newLicense->purchase_cost);
         $this->assertEquals($row['licensedToName'], $newLicense->order_number);
         $this->assertEquals($row['expirationDate'], $newLicense->seats);
         $this->assertEquals($row['licensedToEmail'], $newLicense->notes);
-        $this->assertEquals($row['seats'], $newLicense->license_name);
+        $this->assertEquals($row['seats'], $newLicense->seats);
         $this->assertEquals($row['serialNumber'], $newLicense->license_email);
         $this->assertEquals($row['category'], $newLicense->supplier->name);
         $this->assertEquals($row['notes'], $newLicense->company->name);

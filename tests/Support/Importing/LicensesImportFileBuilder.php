@@ -65,23 +65,22 @@ class LicensesImportFileBuilder extends FileBuilder
         $faker = fake();
 
         return [
-            'category'         => Str::random(),
-            'companyName'      => Str::random() . " {$faker->companySuffix}",
+            'category'         => $faker->word.' (Category)',
+            'companyName'      => $faker->company.' (Company)',
             'expirationDate'   => $faker->date,
             'isMaintained'     => $faker->randomElement(['TRUE', 'FALSE']),
             'isReassignAble'   => $faker->randomElement(['TRUE', 'FALSE']),
-            'licensedToName'   => $faker->name,
+            'licensedToName'   => $faker->name.' (Licensed To)',
             'licensedToEmail'  => $faker->email,
-            'licenseName' => $faker->company.'License Name',
-            'name'        => $faker->phoneNumber(),
-            'manufacturerName' => $faker->company,
+            'licenseName'      => $faker->company.' (License Name)',
+            'manufacturerName' => $faker->city.' (Manufacturer)',
             'notes'            => $faker->sentence,
             'orderNumber'      => "ON:LIC:{$faker->uuid}",
             'purchaseCost'     => rand(1, 100_000),
             'purchaseDate'     => $faker->date,
             'seats'            => rand(1, 10),
             'serialNumber'     => 'SN:LIC:' . Str::random(),
-            'supplierName'     => $faker->company,
+            'supplierName'     => $faker->company.' (Supplier)',
         ];
     }
 }

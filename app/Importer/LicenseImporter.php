@@ -62,10 +62,11 @@ class LicenseImporter extends ItemImporter
             $this->item["expiration_date"] = date("Y-m-d 00:00:01", strtotime(trim($this->findCsvMatch($row, "expiration_date"))));
         }
         $this->item['license_email'] = trim($this->findCsvMatch($row, 'license_email'));
-        //$this->item['name'] = 'poo';
+
         dump($row);
-        $this->item['name'] = trim($this->findCsvMatch($row, 'item_name'));
-        $this->item['license_name'] = trim($this->findCsvMatch($row, 'license_name'));
+        $this->item['name'] = trim($this->findCsvMatch($row, 'name') ?? $this->findCsvMatch($row, 'item_name')) ??
+            $this->item['license_name'] = trim($this->findCsvMatch($row, 'license_name'));
+
         $this->item['maintained'] = trim($this->findCsvMatch($row, 'maintained'));
         $this->item['purchase_order'] = trim($this->findCsvMatch($row, 'purchase_order'));
         $this->item['order_number'] = trim($this->findCsvMatch($row, 'order_number'));
@@ -92,7 +93,6 @@ class LicenseImporter extends ItemImporter
 
         // This sets an attribute on the Loggable trait for the action log
         $license->setImported(true);
-        dump($license);
         if ($license->save()) {
             $this->log('License '.$this->item['name'].' with serial number '.$this->item['serial'].' was created');
 
