@@ -33,6 +33,7 @@ class LicenseImporter extends ItemImporter
      */
     public function createLicenseIfNotExists(array $row)
     {
+        dump($this->item['name']);
         $editingLicense = false;
         $license = License::where('serial', $this->item['serial'])->where('name', $this->item['name'])
                     ->first();
@@ -64,8 +65,17 @@ class LicenseImporter extends ItemImporter
         $this->item['license_email'] = trim($this->findCsvMatch($row, 'license_email'));
 
         dump($row);
-        $this->item['name'] = trim($this->findCsvMatch($row, 'name') ?? $this->findCsvMatch($row, 'item_name')) ??
-            $this->item['license_name'] = trim($this->findCsvMatch($row, 'license_name'));
+        // this is original (and makes all tests EXCEPT custom mapping work)
+        // this is also null/empty...? wut?
+        $this->item['license_name'] = trim($this->findCsvMatch($row, 'license_name'));
+        dump($this->item['license_name']);
+
+        // this fixes customColumnMapping but makes others fail
+        //$this->item['name'] = trim($this->findCsvMatch($row, 'name'));
+
+        // this is an experiment
+        //$this->item['name'] = trim($this->findCsvMatch($row, 'name') ?? $this->findCsvMatch($row, 'item_name')) ??
+        //    $this->item['license_name'] = trim($this->findCsvMatch($row, 'license_name'));
 
         $this->item['maintained'] = trim($this->findCsvMatch($row, 'maintained'));
         $this->item['purchase_order'] = trim($this->findCsvMatch($row, 'purchase_order'));

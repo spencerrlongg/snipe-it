@@ -70,6 +70,7 @@ class ItemImporter extends Importer
         }
 
         $this->item['name'] = $this->findCsvMatch($row, 'item_name');
+        dump($this->item['name']);
         $this->item['notes'] = $this->findCsvMatch($row, 'notes');
         $this->item['order_number'] = $this->findCsvMatch($row, 'order_number');
         $this->item['purchase_cost'] = $this->findCsvMatch($row, 'purchase_cost');
@@ -139,6 +140,7 @@ class ItemImporter extends Importer
     {
         // Create a collection for all manipulations to come.
         $item = collect($this->item);
+        dump($item);
         // First Filter the item down to the model's fillable fields
         $item = $item->only($model->getFillable());
 

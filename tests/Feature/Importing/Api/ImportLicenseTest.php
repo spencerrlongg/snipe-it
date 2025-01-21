@@ -50,7 +50,6 @@ class ImportLicenseTest extends ImportDataTestCase implements TestsPermissionsRe
     public function importLicenses(): void
     {
         $importFileBuilder = ImportFileBuilder::new();
-        dump($importFileBuilder->definition());
         $row = $importFileBuilder->firstRow();
         $import = Import::factory()->license()->create(['file_path' => $importFileBuilder->saveToImportsDirectory()]);
 
@@ -306,6 +305,7 @@ class ImportLicenseTest extends ImportDataTestCase implements TestsPermissionsRe
 
         $this->actingAsForApi(User::factory()->superuser()->create());
 
+        dump($row);
         $this->importFileResponse([
             'import' => $import->id,
             'column-mappings' => [
@@ -316,7 +316,7 @@ class ImportLicenseTest extends ImportDataTestCase implements TestsPermissionsRe
                 "reassignable"      => "purchase_cost",
                 "Licensed To Name"  => "order_number",
                 "Licensed To Email" => "notes",
-                "item name"         => "name",  // Correct mapping for name
+                "item name" => "item_name",  // Correct mapping for name // changing to name worksish???
                 "manufacturer"      => "category",
                 "Notes"             => "company",
                 "Serial number"     => "license_email",
