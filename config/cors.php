@@ -44,6 +44,6 @@ return [
     'allowed_methods' => ['GET', 'POST', 'PUT', 'PATCH', 'DELETE'],
     'exposed_headers' => [],
     'max_age' => 0,
-    'paths' => ['api/*', 'sanctum/csrf-cookie'],
+    'paths' => ['api/*', 'sanctum/csrf-cookie', 'mobile/login', 'mobile/logout'],
 
 ];

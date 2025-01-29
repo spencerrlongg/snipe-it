@@ -24,6 +24,8 @@ class RouteServiceProvider extends ServiceProvider
 
             $this->mapWebRoutes();
 
+            require base_path('routes/mobile.php');
+
             require base_path('routes/scim.php');
         });
     }

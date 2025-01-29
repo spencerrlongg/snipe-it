@@ -56,6 +56,7 @@ class AssetsController extends Controller
      */
     public function index(Request $request, $action = null, $upcoming_status = null) : JsonResponse | array
     {
+        //sleep(15);
 
 
         // This handles the legacy audit endpoints :(
