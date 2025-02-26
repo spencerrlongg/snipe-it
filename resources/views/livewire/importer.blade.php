@@ -271,7 +271,13 @@
                                                                         <a href="#" wire:click.prevent="$set('activeFileId',null)">{{ trans('general.cancel') }}</a>
                                                                     </div>
                                                                     <div class="col-md-9">
-                                                                        <button type="submit" class="btn btn-primary col-md-5" id="import">{{ trans('admin/hardware/message.import.import_button') }}</button>
+                                                                        <button type="submit"
+                                                                                class="btn btn-primary col-md-5"
+                                                                                id="import"
+                                                                                wire:loading.attr="disabled"
+                                                                        >
+                                                                            {{ trans('admin/hardware/message.import.import_button') }}
+                                                                        </button>
                                                                         <br><br>
                                                                     </div>
                                                                 </div>
@@ -323,9 +329,11 @@
                     "X-Requested-With": 'XMLHttpRequest',
                     "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr('content')
                 };
+                // Alpine.data('loading', true);
                 data.process().done( function () {data.submit();});
                 $wire.$set('progress', 0);
                 $wire.clearMessage();
+                // Alpine.data('loading', false);
             },
             progress: function(e, data) {
                 $wire.$set('progress', parseInt((data.loaded / data.total * 100, 10)));
