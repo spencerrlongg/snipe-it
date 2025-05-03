@@ -11,6 +11,8 @@ use App\Services\Saml;
 use Com\Tecnick\Barcode\Barcode;
 use Google2FA;
 use Illuminate\Foundation\Auth\ThrottlesLogins;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
@@ -264,7 +266,7 @@ class LoginController extends Controller
      *
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function login(Request $request)
+    public function login(Request $request): RedirectResponse|JsonResponse
     {
 
         //If the environment is set to ALWAYS require SAML, return access denied
@@ -336,6 +338,10 @@ class LoginController extends Controller
             $user->saveQuietly();
         }
         // Redirect to the users page
+        // just an idea
+        if ($userAgent = 'mobile') {
+            return response()->json('stuff');
+        }
         return redirect()->intended()->with('success', trans('auth/message.signin.success'));
     }
 
