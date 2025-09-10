@@ -17,6 +17,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Str;
 use Laravel\Passport\Passport;
 use Redirect;
 
@@ -332,15 +333,48 @@ class LoginController extends Controller
             $user->activated = 1;
             $user->saveQuietly();
         }
+
+        //MOBILE
         //hm, i'm not sure if this is going to work, not sure i can set the user agent in the RN authSession deal
+        dump($request->userAgent());;
+        dump($request->headers);
         if ($request->userAgent() === 'Snipe-IT-Mobile') {
+
             // something like this, but i need the collection of clients or something
             if (Passport::client() != 'Snipe-IT-Mobile') {
-                exec('php artisan passport:client --public --name="Snipe-IT-Mobile" --password= --no-interaction');
+                // this generates a PKCE client
+                $cli_result = exec('php artisan passport:client --public --name="Snipe-IT-Mobile" --password= --no-interaction');
+                Log::debug('Passport client created: '.$cli_result);
             }
-            //return the bits of code that will be used to get the token
+            //passport stuff
+            // docs have this directly in the /redirect route... so maybe that's the right way? seems weird.
+            $code_verifier = $request->session()->get('code_verifier');
+            $encoded = base64_encode(hash('sha256', $code_verifier, true));
+            $codeChallenge = strtr(rtrim($encoded, '='), '+/', '-_');
+
+            $request->session()->put('state', $state = Str::random(40));
+
+            $request->session()->put(
+                'code_verifier', $code_verifier = Str::random(128)
+            );
+
+            $query = http_build_query([
+                'client_id'             => 'client-id',
+                'redirect_uri'          => 'https://third-party-app.com/callback',
+                'response_type'         => 'code',
+                'scope'                 => '',
+                'state'                 => $state,
+                'code_challenge'        => $codeChallenge,
+                'code_challenge_method' => 'S256',
+                // 'prompt' => '', // "none", "consent", or "login"
+            ]);
+
+            return redirect('http://snipe-it.test/oauth/authorize?'.$query);
+
+
         }
-        // Redirect to the users page
+
+        // Redirect to the users page if regular web login
         return redirect()->intended()->with('success', trans('auth/message.signin.success'));
     }
 

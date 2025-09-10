@@ -25,8 +25,10 @@ use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\ForgotPasswordController;
 use App\Http\Controllers\Auth\ResetPasswordController;
 use App\Livewire\Importer;
+use App\Models\Setting;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Http\Request;
 
 Route::group(['middleware' => 'auth'], function () {
     /*
@@ -463,10 +465,12 @@ Route::group(['prefix' => 'setup', 'middleware' => 'web'], function () {
 
 Route::group(['middleware' => 'web'], function () {
 
-    Route::get(
-        'login',
-        [LoginController::class, 'showLoginForm']
-    )->name("login");
+    Route::get('/login', function (Request $request) {
+        dump($request);
+        dump(session()->all());
+        dump($request->server('HTTP_USER_AGENT'));
+        return view('auth.login');
+    })->name("login");
 
     Route::post(
         'login',
