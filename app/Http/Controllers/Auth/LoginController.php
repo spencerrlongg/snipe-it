@@ -17,6 +17,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Log;
+use Laravel\Passport\Passport;
 use Redirect;
 
 /**
@@ -330,6 +331,14 @@ class LoginController extends Controller
             $user->last_login = \Carbon::now();
             $user->activated = 1;
             $user->saveQuietly();
+        }
+        //hm, i'm not sure if this is going to work, not sure i can set the user agent in the RN authSession deal
+        if ($request->userAgent() === 'Snipe-IT-Mobile') {
+            // something like this, but i need the collection of clients or something
+            if (Passport::client() != 'Snipe-IT-Mobile') {
+                exec('php artisan passport:client --public --name="Snipe-IT-Mobile" --password= --no-interaction');
+            }
+            //return the bits of code that will be used to get the token
         }
         // Redirect to the users page
         return redirect()->intended()->with('success', trans('auth/message.signin.success'));
