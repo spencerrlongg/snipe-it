@@ -64,6 +64,9 @@ class LoginController extends Controller
 
     public function showLoginForm(Request $request)
     {
+        if ($request->query('client') == 'Snipe-IT-Mobile') {
+            Session::put('client', 'Snipe-IT-Mobile');
+        }
         $this->loginViaRemoteUser($request);
         $this->loginViaSaml($request);
         if (Auth::check()) {
@@ -336,10 +339,8 @@ class LoginController extends Controller
 
         //MOBILE
         //hm, i'm not sure if this is going to work, not sure i can set the user agent in the RN authSession deal
-        dump($request->userAgent());;
-        dump($request->headers);
-        if ($request->userAgent() === 'Snipe-IT-Mobile') {
-
+        if (Session::get('client') == 'Snipe-IT-Mobile') {
+            Log::debug('Mobile login detected');
             // something like this, but i need the collection of clients or something
             if (Passport::client() != 'Snipe-IT-Mobile') {
                 // this generates a PKCE client
@@ -370,8 +371,6 @@ class LoginController extends Controller
             ]);
 
             return redirect('http://snipe-it.test/oauth/authorize?'.$query);
-
-
         }
 
         // Redirect to the users page if regular web login

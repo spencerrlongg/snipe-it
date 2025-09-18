@@ -465,12 +465,14 @@ Route::group(['prefix' => 'setup', 'middleware' => 'web'], function () {
 
 Route::group(['middleware' => 'web'], function () {
 
-    Route::get('/login', function (Request $request) {
-        dump($request);
-        dump(session()->all());
-        dump($request->server('HTTP_USER_AGENT'));
-        return view('auth.login');
-    })->name("login");
+    Route::get('login', [LoginController::class, 'showLoginForm'])->name("login");
+
+    //Route::get('/login', function (Request $request) {
+    //    dump($request);
+    //    dump(session()->all());
+    //    dump($request->server('HTTP_USER_AGENT'));
+    //    return view('auth.login');
+    //})->name("login");
 
     Route::post(
         'login',
