@@ -367,7 +367,7 @@ class LoginController extends Controller
                 'code_verifier', $code_verifier = Str::random(128)
             );
 
-            $query = [
+            $query = http_build_query([
                 'client_id'             => 'client-id',
                 'redirect_uri' => 'com.grokability.snipeitmobile://**',
                 'response_type'         => 'code',
@@ -376,26 +376,26 @@ class LoginController extends Controller
                 'code_challenge'        => $codeChallenge,
                 'code_challenge_method' => 'S256',
                 // 'prompt' => '', // "none", "consent", or "login"
-            ];
+            ]);
             $data = [
-                'response_type'         => 'code',
-                'state'                 => $state,
-                'code_challenge'        => $codeChallenge,
-                'redirect_uri'          => 'com.grokability.snipeitmobile://**',
-                'grant_type'            => 'password',
-                'client_id'             => 'client-id',
-                'client_secret'         => 'client-secret',
+                'response_type'  => 'code',
+                'state'          => $state,
+                'code_challenge' => $codeChallenge,
+                'redirect_uri'   => 'com.grokability.snipeitmobile://**',
+                'grant_type'     => 'password',
+                'client_id'      => 'client-id',
+                'client_secret'  => 'client-secret',
                 'code_challenge_method' => 'S256',
-                'username'              => $user->username,
-                'password'              => $request->input('password'),
-                'scope'                 => '*',
+                'username'       => $user->username,
+                'password'       => $request->input('password'),
+                'scope'          => '*',
             ];
 
-            //return redirect('http://snipe-it.test/oauth/authorize?'.$query);
+            return redirect('http://snipe-it.test/oauth/authorize?'.$query);
 
-            $response = Http::asForm()->post(config('app.url').'/oauth/token', $query);
-
-            return json_decode((string) $response->getBody(), true);
+            //$response = Http::asForm()->post(config('app.url').'/oauth/token', $query);
+            //
+            //return json_decode((string) $response->getBody(), true);
         }
 
         // Redirect to the users page if regular web login
