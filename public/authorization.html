@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>Snipe-IT - Authorization</title>
+
+    
+    <link rel="stylesheet" href="https://snipe.ngrok.dev/css/dist/all.css?id=18ebb9c284b49dcf6c8e4fdb923ad923">
+    <style>
+        .passport-authorize .container {
+            margin-top: 30px;
+        }
+
+        .passport-authorize .scopes {
+            margin-top: 20px;
+        }
+
+        .passport-authorize .buttons {
+            margin-top: 25px;
+            text-align: center;
+        }
+
+        .passport-authorize .btn {
+            width: 125px;
+        }
+
+        .passport-authorize .btn-approve {
+            margin-right: 15px;
+        }
+
+        .passport-authorize form {
+            display: inline;
+        }
+    </style>
+</head>
+<body class="passport-authorize">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-6 col-md-offset-3">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        Authorization Request
+                    </div>
+                    <div class="panel-body">
+                        <!-- Introduction -->
+                        <p><strong>Snipe-IT-Mobile</strong> is requesting permission to access your account.</p>
+
+                        <!-- Scope List -->
+                        
+                        <div class="buttons">
+                            <!-- Authorize Button -->
+                            <form method="post" action="/oauth/authorize">
+                                <input type="hidden" name="_token" value="ao5R1v3iqaOdxxUcSqs02YRhB9oEXSHYNRUNxvtY" autocomplete="off">
+
+                                <input type="hidden" name="state" value="23948u2348usldkfgjhlsdkfjalskdjflaksjdf1">
+                                <input type="hidden" name="client_id" value="34">
+                                <button type="submit" class="btn btn-success btn-approve">Authorize</button>
+                            </form>
+
+                            <!-- Cancel Button -->
+                            <form method="post" action="/oauth/authorize">
+                                <input type="hidden" name="_token" value="ao5R1v3iqaOdxxUcSqs02YRhB9oEXSHYNRUNxvtY" autocomplete="off">
+                                <input type="hidden" name="_method" value="DELETE">
+
+                                <input type="hidden" name="state" value="23948u2348usldkfgjhlsdkfjalskdjflaksjdf1">
+                                <input type="hidden" name="client_id" value="34">
+                                <button class="btn btn-danger">Cancel</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

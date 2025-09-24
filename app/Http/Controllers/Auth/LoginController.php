@@ -66,12 +66,12 @@ class LoginController extends Controller
 
     public function showLoginForm(Request $request)
     {
-        dump($request->query());
-        if ($request->query('client_id') == 'mobile') {
-            Session::put('client_id', $request->query('client_id'));
-            Session::put('code_challenge', $request->query('code_challenge'));
-            Session::put('state', $request->query('state'));;
-        }
+        //dump($request->query());
+        //if ($request->query('client_id') == 'mobile') {
+        //    Session::put('client_id', $request->query('client_id'));
+        //    Session::put('code_challenge', $request->query('code_challenge'));
+        //    Session::put('state', $request->query('state'));;
+        //}
         $this->loginViaRemoteUser($request);
         $this->loginViaSaml($request);
         if (Auth::check()) {
@@ -344,62 +344,62 @@ class LoginController extends Controller
 
         //MOBILE
         //hm, i'm not sure if this is going to work, not sure i can set the user agent in the RN authSession deal
-        if (Session::get('client_id') == 'mobile') {
-
-            dump('Mobile login detected');
-            // something like this, but i need the collection of clients or something
-            //if (Passport::client() != 'Snipe-IT-Mobile') {
-            // this generates a PKCE client
-            //$cli_result = exec('php artisan passport:client --public --name="Snipe-IT-Mobile" --password= --no-interaction');
-            //if (!$client = ClientRepository::class()->findByName('Snipe-IT-Mobile')) {
-            $clientRepository = new ClientRepository();
-            $client = $clientRepository->create(null, 'Snipe-IT-Mobile', 'com.grokability.snipeitmobile://home', false, true);
-            //}
-
-            dump('Passport client created:');
-            //}
-            //passport stuff
-            // docs have this directly in the /redirect route... so maybe that's the right way? seems weird.
-            $code_verifier = $request->session()->get('code_verifier');
-            $encoded = base64_encode(hash('sha256', $code_verifier, true));
-            $codeChallenge = strtr(rtrim($encoded, '='), '+/', '-_');
-
-            $request->session()->put('state', $state = Str::random(40));
-
-            $request->session()->put(
-                'code_verifier', $code_verifier = Str::random(128)
-            );
-
-            $query = http_build_query([
-                'client_id'      => $client->id, //Session::get('client_id'), // judging by brady's, this is the id of the client we created above, not the app's
-                'redirect_uri'   => 'com.grokability.snipeitmobile://home', //this seems like it's probably correct
-                'response_type'  => 'code',
-                'scope'          => '*',
-                'state'          => Session::get('state'),
-                'code_challenge' => Session::get('code_challenge'),
-                'code_challenge_method' => 'S256',
-                'prompt'         => 'consent', // "none", "consent", or "login"
-            ]);
-            //$data = [
-            //    'response_type'  => 'code',
-            //    'state'          => $state,
-            //    'code_challenge' => $codeChallenge,
-            //    'redirect_uri'   => 'com.grokability.snipeitmobile://**',
-            //    'grant_type'     => 'password',
-            //    'client_id'      => 'client-id',
-            //    'client_secret'  => 'client-secret',
-            //    'code_challenge_method' => 'S256',
-            //    'username'       => $user->username,
-            //    'password'       => $request->input('password'),
-            //    'scope'          => '*',
-            //];
-
-            return redirect('http://snipe-it.test/oauth/authorize?'.$query);
-
-            //$response = Http::asForm()->post(config('app.url').'/oauth/token', $query);
-            //
-            //return json_decode((string) $response->getBody(), true);
-        }
+        //if (Session::get('client_id') == 'mobile') {
+        //
+        //    dump('Mobile login detected');
+        //    // something like this, but i need the collection of clients or something
+        //    //if (Passport::client() != 'Snipe-IT-Mobile') {
+        //    // this generates a PKCE client
+        //    //$cli_result = exec('php artisan passport:client --public --name="Snipe-IT-Mobile" --password= --no-interaction');
+        //    if (!$client = ClientRepository::class()->findByName('Snipe-IT-Mobile')) {
+        //        $clientRepository = new ClientRepository();
+        //        $client = $clientRepository->create(null, 'Snipe-IT-Mobile', 'com.grokability.snipeitmobile://home', false, true);
+        //    }
+        //
+        //    dump('Passport client created:');
+        //    //}
+        //    //passport stuff
+        //    // docs have this directly in the /redirect route... so maybe that's the right way? seems weird.
+        //    $code_verifier = $request->session()->get('code_verifier');
+        //    $encoded = base64_encode(hash('sha256', $code_verifier, true));
+        //    $codeChallenge = strtr(rtrim($encoded, '='), '+/', '-_');
+        //
+        //    $request->session()->put('state', $state = Str::random(40));
+        //
+        //    $request->session()->put(
+        //        'code_verifier', $code_verifier = Str::random(128)
+        //    );
+        //
+        //    $query = http_build_query([
+        //        'client_id'      => $client->id, //Session::get('client_id'), // judging by brady's, this is the id of the client we created above, not the app's
+        //        'redirect_uri'   => 'com.grokability.snipeitmobile://home', //this seems like it's probably correct
+        //        'response_type'  => 'code',
+        //        'scope'          => '*',
+        //        'state'          => Session::get('state'),
+        //        'code_challenge' => Session::get('code_challenge'),
+        //        'code_challenge_method' => 'S256',
+        //        'prompt'         => 'consent', // "none", "consent", or "login"
+        //    ]);
+        //    //$data = [
+        //    //    'response_type'  => 'code',
+        //    //    'state'          => $state,
+        //    //    'code_challenge' => $codeChallenge,
+        //    //    'redirect_uri'   => 'com.grokability.snipeitmobile://**',
+        //    //    'grant_type'     => 'password',
+        //    //    'client_id'      => 'client-id',
+        //    //    'client_secret'  => 'client-secret',
+        //    //    'code_challenge_method' => 'S256',
+        //    //    'username'       => $user->username,
+        //    //    'password'       => $request->input('password'),
+        //    //    'scope'          => '*',
+        //    //];
+        //
+        //    return redirect('http://snipe-it.test/oauth/authorize?'.$query);
+        //
+        //    //$response = Http::asForm()->post(config('app.url').'/oauth/token', $query);
+        //    //
+        //    //return json_decode((string) $response->getBody(), true);
+        //}
 
         // Redirect to the users page if regular web login
         return redirect()->intended()->with('success', trans('auth/message.signin.success'));

@@ -13,13 +13,13 @@ if ($argv[1] == 1) {
 
     //$cookie_header = 'snipeitv6_session=IguKWh5LyfeAD67p4D27KRH7jKV1x3JcJnmVGBFb; XSRF-TOKEN=eyJpdiI6ImVvS28zQ1REcWgyMCtzM2V2L1JybUE9PSIsInZhbHVlIjoiWURSK2grWmlIYVozbXIvNzlySWtEellFWFpwaG52T3Mzdzg4KytGMVNKK2ZLdkhPRk03UnNqZkt1WGxFVXZodEtMREE1d09CcDVNRzE1bXN0dVhnQ3g5K0VoUFVDS2FUQnZYcW5WSjNQa3VmRVc5ZUlzcTZ1T2JuRTk2L1REUXEiLCJtYWMiOiI4YTliMTkwNWJlNWEwOTYxODcwNDliZThkODM1YTE1YTBjNmE3NDc1MmE3MGE0ZjAyMGQ2MjBmMTMzNmMwOTNlIiwidGFnIjoiIn0%3D; snipeitv6_session=IguKWh5LyfeAD67p4D27KRH7jKV1x3JcJnmVGBFb; snipeit_passport_token=eyJpdiI6ImwyZ3lmZUhaY1BOVXlEU2VoZ2VBZkE9PSIsInZhbHVlIjoiL1Y2bWkxTENubzhtVl…kZTaGZQcXdkRkkvUWRadlgxT2pBRFFjbnNLL3M5Z29YaUJmQkFLd1hWdUZGYUlXZVdaS1RGWEY2NUFkMGxtV2RXZlQrV2VOOUZ4TjM4c2NYN0l3TmlSeVdmcWsyV0F1U2NlTzRJMGlZclhxMFVQS3R4WE1FS1R1WVVoTzIvay93UW9FSHVEQS95dkhqM2tMWmM4ZTU4VUhUYk5LVkpybGM2TTZGR1BGM0JGdDFBTEh5a0NhOUZZRFJBZUJzZGVhQWdTYlg2c1dJei9aaTc0VmlZaUs5VDZGZzllbHN4a3Z3VEZlRzVtSndCWEQxSnBGUjJZQmRWRTlaN3MyTWt0emlOM0pOQVJQbUgyV29JcjNrcloiLCJtYWMiOiIyNTY5YmU4OTlmMDNhN2RjNjY0N2Y1YzJmOThkYTI5NjczYzc1OWIyZTBjZWIyMTMzYTIxMjNiMjUwYjgzMGMyIiwidGFnIjoiIn0%3D; optional_user_info_open=true';
     //$cookie_header =
-    $cookie_header[] = 'snipeit_passport_token=eyJpdiI6IkM4a0pBN1dOdVc2ampMLzVoeHloYkE9PSIsInZhbHVlIjoiRHhWT0UvR0RMWDZsY2V4S2dJUks1b0llNWFOWm1zOXFVdm0rMm1iS3VuaDlVbytXVXJFSm1mckRTM0l2d0tkMWl4YllXWFhZeVFuL1BOMGJrdmM5dk4yTm9GeG9qVVZ2bEhQQ2h1ZVhmT3Y4R1FxS3p6K2dUV05XNFpvU0VoWWpiYmRXaFp5RUtEK2hGZzBrbDlUeDJsMWIxNTV2U2plVDJZdDdPSy85d09MVTV5eGJld295K1k1Rk9lZU9kL3pmZnZEbndRUGlwK2NqSXJIRHlHNWZ5MTUyN0ZCWEhSYUkzTTY3blVacmlZNUZ2N1JtR3E4L2psMy9pRTdEYVBtQkRKdGsrR3hoYlVkcWpQdHpKbVNVa3ZhYnhDNlA0MURzUDFtMmh6cHU3ZXA3UUVOT1FEUUJmWkpscGEyTWhLbkIiLCJtYWMiOiJkOTc5MzMxMGE2MWJiMjVkZGNkYTlkNjc2Mjk2ZDc5NTNmNmU5NmYyZjAyN2NlNzI1NjA0ZDg3ZGYwZDIwNTY5IiwidGFnIjoiIn0%3D';
-    $cookie_header[] = 'XSRF-TOKEN=eyJpdiI6ImJQVlQyWDNJYWtEWjF5b2lza2hGelE9PSIsInZhbHVlIjoidFRlbHN2RWhUOHpaa2JrZ2p1aXJTeEFPcDNSY3U4U054VmVJekVtQXQ3WE15VlExVEtDY0F2cXBENW1NN25nSGxxZG1rQW5vTzlmSk81Z2l6dmpONFpBK2R5ME9JN1V0VjREQndQTm44d0hpalpwMmZLOUw0REtXb3VZdVZGWUciLCJtYWMiOiI0YzhiMWJmYzY1OTdlMzYxYjRmZTVjMTU1NmI3OWE1YzYwMDhkMmYwODZiZjgyMDlhMTkwZTg0ZmQ4ZTczNDVlIiwidGFnIjoiIn0%3D';
-    $cookie_header[] = 'snipeitv6_session=rqB8xFw3jpVKgSgBG5aVKvEgMRkZo4aVwhUSRXJW';
+    $cookie_header[] = 'snipeit_passport_token=eyJpdiI6ImswZ0F2L1J3Rk50eEJZRDg5cTgrb0E9PSIsInZhbHVlIjoiWXNzeXU1RmlLOGZmdnlhNUtDeVVDRE9iT0hjcDQ3bVN6MEVMb1N2VmxwaWZDU2RrUkRXdTRLRjMyblk3eUlUcW92bXFXSDk4TXY5SnBZU0tzenpjSUZlcVRsd2RIV1k3MG9xNlZqQXN0Ymc3TGpjdTBRWnFxUFY5VzZxNkhXczMxUTRQdFJ1RzNlcUY5a1d4L2hUMUEvYS9WWE16SnNtOGN0Vkw1bHRJcGdXNncwMHQwa1Ria2UwbUdsRnRTUE9TQXdxYytNK21BS1JHTTFrVm01NGdESEMxR1YwbkpXTE93Q3VCMDZQTmZVYXZjNG5lOXduVjRJUWJVV3NPenUrdVdSUjMyd2d5cWVwU0NiOEpGMXgrandnMURHUmhJeUF6Mk02WW80TGNueHRZN2RHb0hpQ0xGbEZ5bEE5Z1lDWEoiLCJtYWMiOiJmYTBjNmM2NGIwODEwMTYzYWU2NTkwMGI5NWFhZDQxMDc3NWVlMzI0NjBhMGFiNWM3NGZhMjAxYzEyMTNmNzI5IiwidGFnIjoiIn0%3D';
+    $cookie_header[] = 'XSRF-TOKEN=eyJpdiI6IlhFRE5wa0lMTHZndWlEQ09EZXVFUUE9PSIsInZhbHVlIjoiRXJtSEFOaHQ0OGh1VTdSeUZJNjR3RWxWVFhFWWNWQUp1emVncVBrWlc0aHlhdDM5R2VOc0VKK0VuZnNKYzVvV0tRQ2E0cjdvVUJoM1cvb1hwN0Y0QjU4UGNUMGd3SG1xS3E1eEg2NkNMMERuUkZpWU16VzRPODB2R0VSanI2KzYiLCJtYWMiOiIwZjM5NjYzOWU2ZGQ1NGZkZDcwMjMxN2NkMmUxMjZjOTlkMjdmYjg4M2M5ZTY4MzQ2MzUxNDEzZTZlNDhlZDU3IiwidGFnIjoiIn0%3D';
+    $cookie_header[] = 'snipeit_session=vAKbo0ujC9UvU23ZSbSgZaEunyftBEPj5TjVWtmK';
 
     $cookie_header = join("; ", $cookie_header);
 
-    $output = `curl --cookie-jar cookiefile --cookie "$cookie_header" http://snipe-it.test/oauth/clients`;
+    $output = `curl --cookie-jar cookiefile --cookie "$cookie_header" https://snipe.ngrok.dev/oauth/clients`;
     print $output."\n";
 
     $ans = json_decode($output);
@@ -27,7 +27,7 @@ if ($argv[1] == 1) {
     //exit(0); // is this cookie jar even helping us? Yes, it's good at _this_ point?
     if (!$ans) {
         print "Bad cookie header I guess?\n";
-        exit(0);
+        //exit(0);
     }
 
     // first, we get the 'client' I guess?
@@ -52,10 +52,10 @@ if ($argv[1] == 1) {
     $codeChallenge = strtr(rtrim($encoded, '='), '+/', '-_');
 
     $params = http_build_query([
-        'client_id'             => 5,//'5', //integer five? something else?
+        'client_id'    => 34,//'5', //integer five? something else?
         //'redirect_uri' => 'https://third-party-app.com/callback',
         //'redirect_uri' => 'http://snipe-it.test/something/something',
-        'redirect_uri'          => 'http://snipe-it.test/auth/callback', // *MUST* MATCH client_id 5!!!! There is weird logic around 'localhost'
+        'redirect_uri' => 'com.grokability.snipeitmobile://home', // *MUST* MATCH client_id 5!!!! There is weird logic around 'localhost'
         'response_type'         => 'code',
         //'scope' => 'user:read orders:create',
         //'scope'
@@ -71,10 +71,10 @@ if ($argv[1] == 1) {
         'prompt'                => 'consent'
     ]);
 
-    $results = `curl -b cookiefile --cookie-jar cookiefile 'http://snipe-it.test/oauth/authorize?$params'`;
+    $results = `curl -b cookiefile --cookie-jar cookiefile 'https://snipe.ngrok.dev/oauth/authorize?$params'`;
 
     //print $results; //grab these results, paste them in to snipe-it/public/authorization.html, and view that in a logged-in browser. Click 'accept'
-    file_put_contents("/Users/uberbrady/Documents/grokability/snipe-it/public/authorization.html", $results);
+    file_put_contents("/Users/spencer/dev/snipe-it/public/authorization.html", $results);
 
     //and after that, now what? We've 'consented' (I guess?) - now we need to exchange our token for an API key?
 
@@ -92,8 +92,8 @@ if ($argv[1] == 1) {
 
     $parameters = [
         'grant_type'    => 'authorization_code',
-        'client_id'     => '5',
-        'redirect_uri'  => 'http://snipe-it.test/auth/callback',
+        'client_id'    => '34',
+        'redirect_uri' => 'com.grokability.snipeitmobile://home',
         'code_verifier' => $codeVerifier,
         'code'          => $urlbits['code'],
     ];
@@ -101,7 +101,7 @@ if ($argv[1] == 1) {
     $params = json_encode($parameters);
 
     // NOTE - no headers this time!
-    $results = `curl --json '$params' http://snipe-it.test/oauth/token`;
+    $results = `curl --json '$params' https://snipe.ngrok.dev/oauth/token`;
     print ($results);
     $parsed_results = json_decode($results);
 
