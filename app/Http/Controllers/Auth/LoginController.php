@@ -66,8 +66,11 @@ class LoginController extends Controller
 
     public function showLoginForm(Request $request)
     {
-        if ($request->query('client') == 'Snipe-IT-Mobile') {
-            Session::put('client', 'Snipe-IT-Mobile');
+        dump($request->query());
+        if ($request->query('client_id') == 'mobile') {
+            Session::put('client_id', $request->query('client_id'));
+            Session::put('code_challenge', $request->query('code_challenge'));
+            Session::put('state', $request->query('state'));;
         }
         $this->loginViaRemoteUser($request);
         $this->loginViaSaml($request);
@@ -341,16 +344,16 @@ class LoginController extends Controller
 
         //MOBILE
         //hm, i'm not sure if this is going to work, not sure i can set the user agent in the RN authSession deal
-        if (Session::get('client') == 'Snipe-IT-Mobile') {
+        if (Session::get('client_id') == 'mobile') {
 
             dump('Mobile login detected');
             // something like this, but i need the collection of clients or something
             //if (Passport::client() != 'Snipe-IT-Mobile') {
-                // this generates a PKCE client
+            // this generates a PKCE client
             //$cli_result = exec('php artisan passport:client --public --name="Snipe-IT-Mobile" --password= --no-interaction');
-            //if (!ClientRepository::class()->findByName('Snipe-IT-Mobile')) {
+            //if (!$client = ClientRepository::class()->findByName('Snipe-IT-Mobile')) {
             $clientRepository = new ClientRepository();
-            $clientRepository->create(null, 'Snipe-IT-Mobile', 'com.grokability.snipeitmobile://**', false, true);
+            $client = $clientRepository->create(null, 'Snipe-IT-Mobile', 'com.grokability.snipeitmobile://home', false, true);
             //}
 
             dump('Passport client created:');
@@ -368,28 +371,28 @@ class LoginController extends Controller
             );
 
             $query = http_build_query([
-                'client_id'             => 'client-id',
-                'redirect_uri' => 'com.grokability.snipeitmobile://**',
-                'response_type'         => 'code',
-                'scope'        => '*',
-                'state'                 => $state,
-                'code_challenge'        => $codeChallenge,
-                'code_challenge_method' => 'S256',
-                // 'prompt' => '', // "none", "consent", or "login"
-            ]);
-            $data = [
+                'client_id'      => $client->id, //Session::get('client_id'), // judging by brady's, this is the id of the client we created above, not the app's
+                'redirect_uri'   => 'com.grokability.snipeitmobile://home', //this seems like it's probably correct
                 'response_type'  => 'code',
-                'state'          => $state,
-                'code_challenge' => $codeChallenge,
-                'redirect_uri'   => 'com.grokability.snipeitmobile://**',
-                'grant_type'     => 'password',
-                'client_id'      => 'client-id',
-                'client_secret'  => 'client-secret',
-                'code_challenge_method' => 'S256',
-                'username'       => $user->username,
-                'password'       => $request->input('password'),
                 'scope'          => '*',
-            ];
+                'state'          => Session::get('state'),
+                'code_challenge' => Session::get('code_challenge'),
+                'code_challenge_method' => 'S256',
+                'prompt'         => 'consent', // "none", "consent", or "login"
+            ]);
+            //$data = [
+            //    'response_type'  => 'code',
+            //    'state'          => $state,
+            //    'code_challenge' => $codeChallenge,
+            //    'redirect_uri'   => 'com.grokability.snipeitmobile://**',
+            //    'grant_type'     => 'password',
+            //    'client_id'      => 'client-id',
+            //    'client_secret'  => 'client-secret',
+            //    'code_challenge_method' => 'S256',
+            //    'username'       => $user->username,
+            //    'password'       => $request->input('password'),
+            //    'scope'          => '*',
+            //];
 
             return redirect('http://snipe-it.test/oauth/authorize?'.$query);
 
