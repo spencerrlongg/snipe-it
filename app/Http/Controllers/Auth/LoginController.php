@@ -266,7 +266,7 @@ class LoginController extends Controller
      */
     public function login(Request $request)
     {
-
+        $params = $request->query();
         //If the environment is set to ALWAYS require SAML, return access denied
         if (config('app.require_saml')) {
             Log::debug('require SAML is enabled in the .env - return a 403');
@@ -334,6 +334,10 @@ class LoginController extends Controller
             $user->last_login = \Carbon::now();
             $user->activated = 1;
             $user->saveQuietly();
+        }
+        // Redirect to passport authorize page if the user is trying to login from the mobile app
+        if ($request->session()->get('client') == 'snipe-it-mobile') {
+            return redirect()->route('passport.authorizations.authorize', $params);
         }
         // Redirect to the users page
         return redirect()->intended()->with('success', trans('auth/message.signin.success'));
@@ -440,7 +444,20 @@ class LoginController extends Controller
             $user->saveQuietly();
             $request->session()->put('2fa_authed', $user->id);
 
-            return redirect()->route('home')->with('success', trans('auth/message.signin.success'));
+            //return redirect()->route('home')->with('success', trans('auth/message.signin.success'));
+            if ($request->session()->get('client') == 'snipe-it-mobile') {
+
+                return redirect()->route('passport.authorizations.approve', [
+                    'client_id'             => $request->session()->get('client_id'),
+                    'code_challenge'        => $request->session()->get('code_challenge'),
+                    'code_challenge_method' => $request->session()->get('code_challenge_method'),
+                    'prompt'                => $request->session()->get('prompt'),
+                    'redirect_uri'          => $request->session()->get('redirect_uri'),
+                    'response_type'         => $request->session()->get('response_type'),
+                    'state'                 => $request->session()->get('state'),
+                ]);
+            }
+            return redirect()->intended()->with('success', trans('auth/message.signin.success'));
         }
 
         return redirect()->route('two-factor')->with('error', trans('auth/message.two_factor.invalid_code'));

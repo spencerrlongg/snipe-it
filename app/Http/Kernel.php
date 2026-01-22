@@ -21,6 +21,7 @@ class Kernel extends HttpKernel
         \Illuminate\View\Middleware\ShareErrorsFromSession::class,
         \App\Http\Middleware\CheckForSetup::class,
         \App\Http\Middleware\CheckForDebug::class,
+        \App\Http\Middleware\MobileSession::class,
         \Illuminate\Foundation\Http\Middleware\ConvertEmptyStringsToNull::class,
         \App\Http\Middleware\TrimStrings::class,
         \App\Http\Middleware\SecurityHeaders::class,
