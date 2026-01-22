@@ -17,9 +17,12 @@ class MobileSession
     public function handle(Request $request, Closure $next): Response
     {
         if ($request->has('client')) {
-            // this is mine
+            // this is for us - just to tell us that requests are coming from the mobile app.
             Session::put('client', $request->get('client'));
-            // this is passport's - we might want to do a flash or something to ensure we're not holding stale auth data in the session
+            // this is for passport - too many redirects in our auth flow means the query string gets lost, so we're storing the values in
+            // the session so that we can get through redirects for saml and 2fa logins.
+            // forgetting these keys after they're used is probably smart to make sure we don't have stale auth stuff laying around in the session.
+            // i attempted flashing, doesn't seem to work for this, too many redirects happening.
             Session::put('client_id', $request->query('client_id'));
             Session::put('code_challenge', $request->query('code_challenge'));
             Session::put('code_challenge_method', $request->query('code_challenge_method'));

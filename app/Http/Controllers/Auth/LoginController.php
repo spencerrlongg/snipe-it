@@ -446,8 +446,7 @@ class LoginController extends Controller
 
             //return redirect()->route('home')->with('success', trans('auth/message.signin.success'));
             if ($request->session()->get('client') == 'snipe-it-mobile') {
-
-                return redirect()->route('passport.authorizations.approve', [
+                $response = redirect()->route('passport.authorizations.approve', [
                     'client_id'             => $request->session()->get('client_id'),
                     'code_challenge'        => $request->session()->get('code_challenge'),
                     'code_challenge_method' => $request->session()->get('code_challenge_method'),
@@ -456,6 +455,10 @@ class LoginController extends Controller
                     'response_type'         => $request->session()->get('response_type'),
                     'state'                 => $request->session()->get('state'),
                 ]);
+
+                Session::forget(['client_id', 'code_challenge', 'code_challenge_method', 'prompt', 'redirect_uri', 'response_type', 'state']);
+
+                return $response;
             }
             return redirect()->intended()->with('success', trans('auth/message.signin.success'));
         }
