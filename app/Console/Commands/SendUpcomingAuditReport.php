@@ -67,7 +67,7 @@ class SendUpcomingAuditReport extends Command
                     ->filter(fn($item) => !empty($item))
                     ->all();
 
-                Mail::to($recipients)->send(new SendUpcomingAuditMail($assets_for_email, $settings->audit_warning_days, $asset_count));
+                Mail::to($recipients)->send(new SendUpcomingAuditMail($assets_for_email, $interval, $asset_count));
                 $this->info('Audit notification sent to: ' . $settings->alert_email);
 
             } else {
