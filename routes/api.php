@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Api;
 use Illuminate\Support\Facades\Route;
+use Laravel\Passport\Client;
 
 
 /*
@@ -25,6 +26,11 @@ Route::group(['prefix' => 'v1', 'middleware' => ['api', 'api-throttle:api']], fu
                 'message' => '404 endpoint not found. This is the base URL for the API and does not return anything itself. Please check the API reference at https://snipe-it.readme.io/reference to find a valid API endpoint.',
                 'payload' => null,
             ], 404);
+    });
+
+    Route::withoutMiddleware(['api'])->get('/client', function () {
+        return response()->json([
+        ]);
     });
 
 

@@ -149,9 +149,6 @@ class LoginController extends Controller
                 Log::debug("SAML page requested, but samlData seems empty.");
             }
         }
-
-
-
     }
 
     /**
