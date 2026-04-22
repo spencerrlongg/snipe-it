@@ -29,7 +29,20 @@ Route::group(['prefix' => 'v1', 'middleware' => ['api', 'api-throttle:api']], fu
     });
 
     Route::withoutMiddleware(['api'])->get('/client', function () {
+        $client = Client::firstOrCreate(
+            ['redirect' => 'com.grokability.snipeitmobile://home'],
+            [
+                'name'                   => 'Snipe-IT Mobile App',
+                'user_id'                => null,
+                'secret'                 => '',
+                'public'                 => true,
+                'personal_access_client' => false,
+                'password_client'        => false,
+                'revoked'                => false,
+            ]);
+
         return response()->json([
+            'client_id' => $client->id,
         ]);
     });
 
