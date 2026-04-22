@@ -35,7 +35,6 @@ Route::group(['prefix' => 'v1', 'middleware' => ['api', 'api-throttle:api']], fu
                 'name'                   => 'Snipe-IT Mobile App',
                 'user_id'                => null,
                 'secret'                 => '',
-                'public'                 => true,
                 'personal_access_client' => false,
                 'password_client'        => false,
                 'revoked'                => false,
